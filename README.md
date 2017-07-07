@@ -5,7 +5,9 @@
 
 # To Do
 []1. Get and store the postions form preview window: Projector edge, ROIs
+
 []2. Create 1024x786 fullscreen windown 
+
 []3. Transfer the various of postions
 
 
