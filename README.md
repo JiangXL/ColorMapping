@@ -11,7 +11,10 @@
 []3. Transfer the various of postions
 
 
+
 # Reading More
+https://github.com/vanNimwegenLab/MiM_NikonTi/blob/master/Docs/NikonTi_hardware_triggering.md
+
 https://imagej.nih.gov/ij/developer/api/index.html
 
 https://imagej.nih.gov/ij/developer/api/ij/gui/package-summary.html
