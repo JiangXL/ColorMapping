@@ -1,5 +1,5 @@
 # Introduction
-  A ImageJ plugin to track *C.elegans* and light single  *C.elegans* in whole view field by LCD projector.
+  Under pygame and opencv, to track *C.elegans* and light single  *C.elegans* in whole view field by LCD projector.
   
 # Usage
 
