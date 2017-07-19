@@ -18,10 +18,37 @@ from pygame.locals import*
 class mainWindow(QWidget):
     def __init__(self, parent=None):
         super(mainWindow, self).__init__(parent)
-        button = QPushButton(u'Preview', self)
+        self.setWindowTitle('Lauch Pad')
+        self.setGeometry(600, 600, 900, 600)
+
+        preview_button = QPushButton(u'Preview', self)
+        stimulate_button = QPushButton('Stimulate',self)
+        capture_button = QPushButton('Capture',self)
+
+        control_box = QHBoxLayout()
+        control_box.addStretch()
+        control_box.addWidget(preview_button)
+        control_box.addWidget(stimulate_button)
+        control_box.addWidget(capture_button)
+        control_box.setSpacing(0)
+
+        camera_box = QGridLayout()
+        expose_lab = QLabel('Expose',self)
+
+
+        #camera_box.addWidget(expose_lab)
+
+
+        vbox = QVBoxLayout()
+        vbox.addStretch()
+        vbox.addLayout(control_box)
+        vbox.addLayout(camera_box)
+
+        self.setLayout(vbox)
+
         self.canvas = canvas()
         self.canvas.show()
-        self.connect(button, SIGNAL('clicked()'), self.canvas.showFullScreen)
+        self.connect(preview_button, SIGNAL('clicked()'), self.canvas.showFullScreen)
 
         #button_sti = QPushButton(u'Stimulate', self)
         #button_Capture= QPushButton(u'Capture', self)
@@ -35,6 +62,8 @@ class mainWindow(QWidget):
 class canvas(QWidget):
     def __init__(self, parent = None):
         super(canvas, self).__init__(parent)
+        self.setGeometry(300, 300, 900, 600)
+
 
     def paintEvent(self,e):
         qp=QPainter()
