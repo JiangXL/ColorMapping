@@ -2,6 +2,9 @@
   Under pygame and opencv, to track *C.elegans* and light single  *C.elegans* in whole view field by LCD projector.
 
 # Usage
+## Prerequisite
+1. lima
+2. Andor3 SDK of Linux
 
 PyQt4
 Python3

@@ -18,7 +18,7 @@ from pygame.locals import*
 class mainWindow(QWidget):
     def __init__(self, parent=None):
         super(mainWindow, self).__init__(parent)
-        self.setWindowTitle('Lauch Pad')
+        self.setWindowTitle('Launch Pad')
         self.setGeometry(600, 600, 900, 600)
 
         preview_button = QPushButton(u'Preview', self)
@@ -30,28 +30,47 @@ class mainWindow(QWidget):
         control_box.addWidget(preview_button)
         control_box.addWidget(stimulate_button)
         control_box.addWidget(capture_button)
-        control_box.setSpacing(0)
+
+        light_box = QGridLayout()
+        roi_1 = QPushButton("ROT 1") # connect to a event
+        light_box.addWidget(QLineEdit("Red"),0,2)
+        light_box.addWidget(QPushButton("ROI 1"),0,0)
+        light_box.addWidget(QCheckBox("Red"),0,1)
+        light_box.addWidget(QCheckBox("Blue"),0,3)
+        light_box.addWidget(QLineEdit("Blue"),0,4)
+
+        roi_1 = QPushButton("ROT 2") # connect to a event
+        light_box.addWidget(QPushButton("ROI 1"),1,0)
+        light_box.addWidget(QCheckBox("Red"),1,1)
+        light_box.addWidget(QLineEdit("Red"),1,2)
+        light_box.addWidget(QCheckBox("Blue"),1,3)
+        light_box.addWidget(QLineEdit("Blue"),1,4)
+
+
+
 
         camera_box = QGridLayout()
-        expose_lab = QLabel('Expose',self)
+        camera_box.setSpacing(20)
+        camera_box.addWidget(QLabel("Expose_lab"),0,0)
+        camera_box.addWidget(QLineEdit(),0,1)
+        camera_box.addWidget(QSlider(Qt.Horizontal),0,2)
+        camera_box.addWidget(QLabel("Capture Seq"),1,0)
+        camera_box.addWidget(QLineEdit(),1,1)
+        camera_box.addWidget(QSlider(Qt.Horizontal),1,2)
+        camera_box.addWidget(QPushButton("Normal"),2,0)
+
+        main_grid = QGridLayout()
+        main_grid.addLayout(control_box,1,3)
+        main_grid.addLayout(light_box,2,3)
+        main_grid.addLayout(camera_box,3,3)
 
 
-        #camera_box.addWidget(expose_lab)
-
-
-        vbox = QVBoxLayout()
-        vbox.addStretch()
-        vbox.addLayout(control_box)
-        vbox.addLayout(camera_box)
-
-        self.setLayout(vbox)
+        self.setLayout(main_grid)
 
         self.canvas = canvas()
-        self.canvas.show()
-        self.connect(preview_button, SIGNAL('clicked()'), self.canvas.showFullScreen)
-
-        #button_sti = QPushButton(u'Stimulate', self)
-        #button_Capture= QPushButton(u'Capture', self)
+        #self.canvas.show()
+        self.connect(preview_button,SIGNAL('clicked()'),
+                                self.canvas.showFullScreen)
 
 
 ###############################################################################
