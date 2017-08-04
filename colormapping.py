@@ -5,12 +5,12 @@
 Programe to light the C.elegans
 """
 
-import pygame,sys
-from PyQt5.QtCore import *
+import sys
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
-from pygame.locals import*
-from PyQt5.QtWidgets import*
-#from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import(QWidget, QHBoxLayout, QFrame, QPushButton,
+        QApplication, QGridLayout, QLineEdit, QCheckBox, QSlider, QLabel,
+        QSplitter)
 
 ################################################################################
 #                                                                              #
@@ -41,7 +41,7 @@ class mainWindow(QWidget):
         light_box.addWidget(QCheckBox("Blue"),0,3)
         light_box.addWidget(QLineEdit("Blue"),0,4)
 
-        roi_1 = QPushButton("ROT 2") # connect to a event
+        roi_2 = QPushButton("ROT 2") # connect to a event
         light_box.addWidget(QPushButton("ROI 1"),1,0)
         light_box.addWidget(QCheckBox("Red"),1,1)
         light_box.addWidget(QLineEdit("Red"),1,2)
@@ -70,10 +70,8 @@ class mainWindow(QWidget):
         self.setLayout(main_grid)
 
         self.canvas = canvas()
-        #self.canvas.show()
-        self.connect(preview_button,SIGNAL('clicked()'),
-                                self.canvas.showFullScreen)
-
+        self.canvas.show()
+        preview_button.clicked.connect(self.canvas.showFullScreen)
 
 ###############################################################################
 #                                                                             #
