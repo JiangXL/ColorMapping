@@ -9,6 +9,8 @@ import pygame,sys
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from pygame.locals import*
+from PyQt5.QtWidgets import*
+#from PyQt5.QtWidgets import QApplication
 
 ################################################################################
 #                                                                              #
@@ -77,12 +79,11 @@ class mainWindow(QWidget):
 #                                                                             #
 #                           2.ROI                                             #
 #                                                                             #
-###############################################################################
+###############################################################################QPushButton
 class canvas(QWidget):
     def __init__(self, parent = None):
         super(canvas, self).__init__(parent)
         self.setGeometry(300, 300, 900, 600)
-
 
     def paintEvent(self,e):
         qp=QPainter()
