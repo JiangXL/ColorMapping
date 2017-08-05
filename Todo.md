@@ -1,4 +1,5 @@
 # To Do
+[] 8. keyboard keyword
 [] 7. 进度条（QProgressBar）
 [] 6. Data store with date
 [] 5.widget组件提供气泡帮助提示框。

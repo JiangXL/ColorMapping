@@ -11,10 +11,10 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import(QWidget, QHBoxLayout, QFrame, QPushButton,
         QApplication, QGridLayout, QLineEdit, QCheckBox, QSlider, QLabel,
         QSplitter)
-
+from map import*
 ################################################################################
 #                                                                              #
-#                              1. Control Panel                                #
+#                              1. Control Launch Pad                           #
 #                                                                              #
 ################################################################################
 class mainWindow(QWidget):
@@ -23,32 +23,39 @@ class mainWindow(QWidget):
         self.setWindowTitle('Launch Pad')
         self.setGeometry(600, 600, 900, 600)
 
-        preview_button = QPushButton(u'Preview', self)
+        mainbox = QHBoxLayout(self)
+
+        # open Camera and set map to fullscreen and black backgram
+        preview_button   = QPushButton(u'Preview', self)
+        canvas = canvas()
+        canvas.show()
+        preview_button.clicked.connect(canvas.showFullScreen)
+
+        #
         stimulate_button = QPushButton('Stimulate',self)
-        capture_button = QPushButton('Capture',self)
+
+        capture_button   = QPushButton('Capture',self)
+
 
         control_box = QHBoxLayout()
-        control_box.addStretch()
         control_box.addWidget(preview_button)
         control_box.addWidget(stimulate_button)
         control_box.addWidget(capture_button)
 
-        light_box = QGridLayout()
+        roi_box = QGridLayout()
         roi_1 = QPushButton("ROT 1") # connect to a event
-        light_box.addWidget(QLineEdit("Red"),0,2)
-        light_box.addWidget(QPushButton("ROI 1"),0,0)
-        light_box.addWidget(QCheckBox("Red"),0,1)
-        light_box.addWidget(QCheckBox("Blue"),0,3)
-        light_box.addWidget(QLineEdit("Blue"),0,4)
+        roi_box.addWidget(QLineEdit("Red"),0,2)
+        roi_box.addWidget(QPushButton("ROI 1"),0,0)
+        roi_box.addWidget(QCheckBox("Red"),0,1)
+        roi_box.addWidget(QCheckBox("Blue"),0,3)
+        roi_box.addWidget(QLineEdit("Blue"),0,4)
 
         roi_2 = QPushButton("ROT 2") # connect to a event
-        light_box.addWidget(QPushButton("ROI 1"),1,0)
-        light_box.addWidget(QCheckBox("Red"),1,1)
-        light_box.addWidget(QLineEdit("Red"),1,2)
-        light_box.addWidget(QCheckBox("Blue"),1,3)
-        light_box.addWidget(QLineEdit("Blue"),1,4)
-
-
+        roi_box.addWidget(QPushButton("ROI 2"),1,0)
+        roi_box.addWidget(QCheckBox("Red"),1,1)
+        roi_box.addWidget(QLineEdit("Red"),1,2)
+        roi_box.addWidget(QCheckBox("Blue"),1,3)
+        roi_box.addWidget(QLineEdit("Blue"),1,4)
 
 
         camera_box = QGridLayout()
@@ -61,48 +68,43 @@ class mainWindow(QWidget):
         camera_box.addWidget(QSlider(Qt.Horizontal),1,2)
         camera_box.addWidget(QPushButton("Normal"),2,0)
 
-        main_grid = QGridLayout()
-        main_grid.addLayout(control_box,1,3)
-        main_grid.addLayout(light_box,2,3)
-        main_grid.addLayout(camera_box,3,3)
+        video_frame = QFrame(self)
+        video_frame.setFrameShape(QFrame.StyledPanel)
+
+        control_frame = QFrame(self)
+        control_frame.setFrameShape(QFrame.StyledPanel)
+        control_frame.setLayout(control_box)
+
+        roi_frame = QFrame(self)
+        roi_frame.setFrameShape(QFrame.StyledPanel)
+        roi_frame.setLayout(roi_box)
+
+        camera_frame = QFrame(self)
+        camera_frame.setFrameShape(QFrame.StyledPanel)
+        camera_frame.setLayout(camera_box)
 
 
-        self.setLayout(main_grid)
+        splitter1 = QSplitter(Qt.Vertical)
+        splitter1.addWidget(control_frame)
+        splitter1.addWidget(roi_frame)
+        splitter1.addWidget(camera_frame)
 
-        self.canvas = canvas()
-        self.canvas.show()
-        preview_button.clicked.connect(self.canvas.showFullScreen)
+        splitter2 = QSplitter(Qt.Horizontal)
+        splitter2.addWidget(video_frame)
+        splitter2.addWidget(splitter1)
+
+
+        mainbox.addWidget(splitter2)
+
+        self.setLayout(mainbox)
+
 
 ###############################################################################
 #                                                                             #
-#                           2.ROI                                             #
+#                           2.ROI Pad                                         #
 #                                                                             #
-###############################################################################QPushButton
-class canvas(QWidget):
-    def __init__(self, parent = None):
-        super(canvas, self).__init__(parent)
-        self.setGeometry(300, 300, 900, 600)
+###############################################################################
 
-    def paintEvent(self,e):
-        qp=QPainter()
-        qp.begin(self)
-        self.drawRectangles(qp)
-        qp.end()
-
-    def drawRectangles(self, qp):
-        color = QColor(0,0,0)
-        color.setNamedColor('#d4d4d4')
-        qp.setPen(color)
-
-        qp.setBrush(QColor(255,0,0))
-        qp.drawRect(10,15,90,60)
-
-
-        qp.setBrush(QColor(0,0,255))
-        qp.drawRect(130,15,90,60)
-
-
-#def log():
 
 
 def main():
