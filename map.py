@@ -22,3 +22,10 @@ class canvas(QWidget):
 
         qp.setBrush(QColor(0,0,255))
         qp.drawRect(130,15,90,60)
+
+
+def main():
+    app = QApplication(sys.argv)
+    canvas= canvas()
+    canvas.show()
+    app.exec_()
