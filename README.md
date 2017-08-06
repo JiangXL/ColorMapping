@@ -5,8 +5,7 @@
 
 # Now
 1. OpenCV is supported, but how to do it with bitflow sdk?
-2. What kind of our Camera Link?
-3.
+2. How to show the video in python
 
 # Usage
 ## Prerequisite
