@@ -68,3 +68,5 @@ systemctl enable andorcameralink.service
 + [PyQt](https://wiki.python.org/moin/PyQt)
 
 # License
+GNU General Public License v3.0
+
