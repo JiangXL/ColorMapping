@@ -11,6 +11,11 @@
 # Usage
 ## Prerequisite
 1. lima
+  ``` bash
+  sudo pacman -S python-sip
+  sudo pip install numpy
+  ```
+
 2. Install Andor SDK3 in  ArchLinux
 ``` bash
 sudo pacman -S linux-headers
