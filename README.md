@@ -68,10 +68,9 @@ systemctl enable andorcameralink.service
 + [Bitflow SDK Introduction]( www.bitflow.com/products/details/third-party-software)
 + [Bitflow Downloads](www.bitflow.com/products/downloads )
 + [NikonTi hardware triggering](https://github.com/vanNimwegenLab/MiM_NikonTi/blob/master/Docs/NikonTi_hardware_triggering.md)
-+ [Lima](http://lima.blissgarden.org/camera/andor3/doc/index.html?highlight=andor3)
++ [Lima  with andor sdk3](http://lima.blissgarden.org/camera/andor3/doc/index.html?highlight=andor3)
 + [python andor](https://pypi.python.org/pypi/andor)
 + [PyQt](https://wiki.python.org/moin/PyQt)
 
 # License
 GNU General Public License v3.0
-
