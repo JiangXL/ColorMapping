@@ -1,3 +1,10 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+"""
+ROI object
+"""
+import sys
 from PyQt5.QtWidgets import QApplication, QWidget
 
 class canvas(QWidget):
@@ -24,8 +31,8 @@ class canvas(QWidget):
         qp.drawRect(130,15,90,60)
 
 
-def main():
-    app = QApplication(sys.argv)
+if __name__ == ' __main__':
+    apptest = QApplication(sys.argv)
     canvas= canvas()
     canvas.show()
     app.exec_()

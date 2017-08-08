@@ -7,11 +7,11 @@ Programe to light the C.elegans
 
 import sys
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import *
+from PyQt5.QtGui import QPainter,QColor, QPen
 from PyQt5.QtWidgets import(QWidget, QHBoxLayout, QFrame, QPushButton,
         QApplication, QGridLayout, QLineEdit, QCheckBox, QSlider, QLabel,
         QSplitter)
-from map import*
+#from map import*
 ################################################################################
 #                                                                              #
 #                              1. Control Launch Pad                           #
@@ -27,13 +27,14 @@ class mainWindow(QWidget):
 
         # open Camera and set map to fullscreen and black backgram
         preview_button   = QPushButton(u'Preview', self)
-        canvas = canvas()
-        canvas.show()
-        preview_button.clicked.connect(canvas.showFullScreen)
+        self.canvas = canvas()
+        self.canvas.show()
+        preview_button.clicked.connect(self.canvas.showFullScreen)
+        preview_button.setToolTip('Fullscreen map and show live capture of camera')
 
         #
         stimulate_button = QPushButton('Stimulate',self)
-
+        stimulate_button.setToolTip('Power on the projector')
         capture_button   = QPushButton('Capture',self)
 
 
@@ -104,6 +105,33 @@ class mainWindow(QWidget):
 #                           2.ROI Pad                                         #
 #                                                                             #
 ###############################################################################
+class canvas(QWidget):
+    def __init__(self, parent = None):
+        super(canvas, self).__init__(parent)
+        self.setGeometry(300, 300, 900, 600)
+        self.setAutoFillBackground(True) # Set Window background be black 
+        p = self.palette()
+        p.setColor(self.backgroundRole(),QColor(0,0,0))
+        self.setPalette(p)
+
+    def paintEvent(self,e):
+        qp=QPainter()
+        qp.begin(self)
+        self.drawRectangles(qp)
+        qp.end()
+
+    def drawRectangles(self, qp):
+        color = QColor(0,0,0)
+        color.setNamedColor('#d4d4d4')
+        qp.setPen(color)
+
+        qp.setBrush(QColor(255,0,0))
+        qp.drawRect(10,15,90,60)
+
+
+        qp.setBrush(QColor(0,0,255))
+        qp.drawRect(130,15,90,60)
+
 
 
 
