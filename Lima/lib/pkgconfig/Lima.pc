@@ -1,7 +1,7 @@
 prefix=/home/igem/Documents/Lima/install
 libdir=/home/igem/Documents/Lima/install/Lima//lib
 includedir=/home/igem/Documents/Lima/install/Lima//include
-config_defines= -DWITH_SPS_IMAGE -DWITH_CONFIG
+config_defines= -DWITH_SPS_IMAGE -DWITH_TIFF_SAVING -DWITH_HDF5_SAVING -DWITH_CONFIG
 libadd=
 
 Name: Lima

@@ -1,35 +1,26 @@
 # Introduction
 
-  Under pygame and opencv, to track *C.elegans* and light single  *C.elegans* in whole view field by LCD projector.
+Track *C.elegans* and light single  *C.elegans* inside microscope by LCD
+projector. This project is code by PyQt5 and Python2 in anaconda, which is
+tested on Archlinux.
 
-  Andor SDK3+ Bitflow
+
+# Prerequisite
 
 
-# Usage
+1. Install Andor SDK3 in  ArchLinux
 
-## Prerequisite
-
-1. Install Lima
-  ``` bash
-  sudo pacman -S python-sip
-  sudo pip install numpy
-  ```
-LD_LIBRARY_PATH should be setted finally.
-
-2. Install Andor SDK3 in  ArchLinux
 ``` bash
+# prepare tool for kenel compile
 sudo pacman -S linux-headers
 sudo pacman -S numactl
-```
-Enter the andor directory and run
-``` bash
+# Andor sdk3 only run below linux kernel 4, so I install linux kernel 3.16
+yaourt linux-lts316
+#Enter the andor directory and run
 sudo ./install_andor
-```
-I trouble in Arch least Linux Kernel 4.11, so I install the 3.16 kernel form AUR by yaourt.
-Then I add the follow configure to /etc/systemd/system
-
-``` bash
+#Then I add the follow configure to /etc/systemd/system
 #andorcameralink.service                                            
+
 [Unit]
 Description= Andor Camera Link
 
@@ -54,6 +45,40 @@ The andorcameralink.service is enable by
 systemctl enable andorcameralink.service
 ```
 The offical examples can run.
+
+
+2. Compilation and  installatin of Lima
+  * Dependents
+``` bash
+sudo pacman -S python-sip
+sudo pip install numpy  
+```
+  * Compilation
+``` bash
+# generate config.inc
+make
+# Edit the configuration file config.inc
+...
+COMPILE_CORE=1
+COMPILE_ANDOR3=1
+COMPILE_TIFF_SAVING=1
+COMPILE_HDF5_SAVING=1
+...
+# Configure all python modules
+make config
+# Finally compile all C++ libraries
+make
+# Compile all Python modules
+make -C sip -j3
+```
+  * Installation
+```bash
+sudo make install
+# Update environment for python and library paths
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<my-new-install-dir>/Lima/lib
+export PYTHONPATH=$PYTHONPATH:<my-new-install-dir>
+```
+
 
 
 3. Install Micro-manager in ArchLinux
