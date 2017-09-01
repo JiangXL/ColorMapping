@@ -11,15 +11,15 @@ ct = Core.CtControl(hwint)
 acq = ct.acquisition()
 
 # configure some hw parameters
-hwint.setTemperatureSP(-10)
-hwint.setCooler(True)
+#hwint.setTemperatureSP(-10)
+#hwint.setCooler(True)
 #.... wait here for cooling
 
 # set some low level configuration
 
-hwint.setCooler(True)
-hwint.setTemperatureSP(-55)
-hwint.setFanSpeed(cam.Low)
+#hwint.setCooler(True)
+#hwint.setTemperatureSP(-55)
+#hwint.setFanSpeed(cam.Low)
 hwint.setAdcGain(cam.b11_low_gain)
 hwint.setAdcRate(cam.MHz100)
 hwint.setElectronicShutterMode(cam.Rolling)

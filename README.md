@@ -1,20 +1,20 @@
 # Introduction
+
   Under pygame and opencv, to track *C.elegans* and light single  *C.elegans* in whole view field by LCD projector.
 
   Andor SDK3+ Bitflow
 
-# Now
-1. OpenCV is supported, but how to do it with bitflow sdk?
-2. How to show the video in python
 
 # Usage
+
 ## Prerequisite
+
 1. Install Lima
   ``` bash
   sudo pacman -S python-sip
   sudo pip install numpy
   ```
-  I fail to install
+LD_LIBRARY_PATH should be setted finally.
 
 2. Install Andor SDK3 in  ArchLinux
 ``` bash
@@ -53,6 +53,8 @@ The andorcameralink.service is enable by
 ``` bash
 systemctl enable andorcameralink.service
 ```
+The offical examples can run.
+
 
 3. Install Micro-manager in ArchLinux
 
@@ -66,6 +68,7 @@ systemctl enable andorcameralink.service
 ## Install
 
 # Reading More
+
 + [Bitflow SDK Introduction]( www.bitflow.com/products/details/third-party-software)
 + [Bitflow Downloads](www.bitflow.com/products/downloads )
 + [NikonTi hardware triggering](https://github.com/vanNimwegenLab/MiM_NikonTi/blob/master/Docs/NikonTi_hardware_triggering.md)
@@ -73,5 +76,6 @@ systemctl enable andorcameralink.service
 + [python andor](https://pypi.python.org/pypi/andor)
 + [PyQt](https://wiki.python.org/moin/PyQt)
 + [Andor sdk3 Micro-manager](https://micro-manager.org/wiki/AndorSDK3)
+
 # License
 GNU General Public License v3.0
