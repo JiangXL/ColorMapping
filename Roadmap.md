@@ -5,12 +5,20 @@
 |Install Andor3 SDK  | Yes |
 |Install Lima        | work in progress |
 |GUI design | work in progress |
-|
+
+
+# ColorMapping 2.0
+| Feature    | Status   | Comments 
+|------------|----------|---------
+|pip install | no start |
 
 # To Do
 [] 8. keyboard keyword
+
 [] 7. 进度条（QProgressBar）
+
 [] 6. Data store with date
+
 [] 5.widget组件提供气泡帮助提示框。
 
 [] 4. Test the new Andor SDK3
