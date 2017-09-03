@@ -11,7 +11,7 @@ from PyQt5.QtGui import QPainter,QColor, QPen
 from PyQt5.QtWidgets import(QWidget, QHBoxLayout, QFrame, QPushButton,
         QApplication, QGridLayout, QLineEdit, QCheckBox, QSlider, QLabel,
         QSplitter)
-#from map import*
+
 ################################################################################
 #                                                                              #
 #                              1. Control Launch Pad                           #
@@ -20,7 +20,7 @@ from PyQt5.QtWidgets import(QWidget, QHBoxLayout, QFrame, QPushButton,
 class mainWindow(QWidget):
     def __init__(self, parent=None):
         super(mainWindow, self).__init__(parent)
-        self.setWindowTitle('Launch Pad')
+        self.setWindowTitle('Control Pad')
         self.setGeometry(600, 600, 900, 600)
 
         mainbox = QHBoxLayout(self)
@@ -30,13 +30,15 @@ class mainWindow(QWidget):
         self.canvas = canvas()
         self.canvas.show()
         preview_button.clicked.connect(self.canvas.showFullScreen)
-        preview_button.setToolTip('Fullscreen map and show live capture of camera')
+        preview_button.setToolTip('Fullscreen map and open camera')
 
-        #
-        stimulate_button = QPushButton('Stimulate',self)
-        stimulate_button.setToolTip('Power on the projector')
-        capture_button   = QPushButton('Capture',self)
+        # Power on the projector and projecte image 
+        stimulate_button = QPushButton('Stimulate',self)  # Check the projector
+        stimulate_button.setToolTip('Power on the projector and projecte image')
 
+        # Start Capture
+        capture_button   = QPushButton('Capture',self) 
+        capture_button.setToolTip('Capture the image sequence')
 
         control_box = QHBoxLayout()
         control_box.addWidget(preview_button)
@@ -44,14 +46,14 @@ class mainWindow(QWidget):
         control_box.addWidget(capture_button)
 
         roi_box = QGridLayout()
-        roi_1 = QPushButton("ROT 1") # connect to a event
+        roi_1 = QPushButton("ROT 1") # Start pyqtgraph ROI 
         roi_box.addWidget(QLineEdit("Red"),0,2)
         roi_box.addWidget(QPushButton("ROI 1"),0,0)
         roi_box.addWidget(QCheckBox("Red"),0,1)
         roi_box.addWidget(QCheckBox("Blue"),0,3)
-        roi_box.addWidget(QLineEdit("Blue"),0,4)
+        roi_box.addWidget(QLineEdit("Blue"),0,4) #Send to map.addroi
 
-        roi_2 = QPushButton("ROT 2") # connect to a event
+        roi_2 = QPushButton("ROT 2") # 
         roi_box.addWidget(QPushButton("ROI 2"),1,0)
         roi_box.addWidget(QCheckBox("Red"),1,1)
         roi_box.addWidget(QLineEdit("Red"),1,2)

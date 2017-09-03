@@ -26,12 +26,12 @@ cam_int = Andor3.Interface(cam)
 cam_ctr = Core.CtControl(cam_int)
 
 print("\n** Removing all files that could interfer with acquisition :")
-os.system("rm -fv /mnt/local-spool/testing_A_*.tiff /mnt/local-spool/testing_A_*.nxs")
+os.system("rm -fv /mnt/DataHub3/iGEM/20170903/camera/testing*.tiff")
 
 print("\n** Taking care of the saving format : 1st serie is wihtOUT saving")
 cam_sav = cam_ctr.saving()
-cam_sav.setDirectory("/mnt/local-spool")
-cam_sav.setPrefix("testing_A_")
+cam_sav.setDirectory("/mnt/DataHub3/iGEM/20170903/camera")
+cam_sav.setPrefix("testing")
 cam_sav.setSavingMode(Core.CtSaving.Manual)
 
 print(cam_sav.getParameters())
@@ -53,7 +53,7 @@ print("\n**Testing the acquisition exposure and latency :")
 ## cam.setAdcRate(cam.MHz100)
 ## cam.getLatTimeRange() ## 0.0286
 
-cam_acq= cam_ctr.acquisition()
+cam_acq = cam_ctr.acquisition()
 print("Setting the trigger mode to internal :")
 cam_acq.setTriggerMode(Core.IntTrig)
 print("setting the exposition time to 0.001 ...")

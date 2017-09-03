@@ -40,10 +40,12 @@ sudo modprobe videodev
 sudo insmodAndor /home/igem/Downloads/andor-sdk3-3.13.30001.0/andor/bitflow/drv/bitf$
 sudo chmod a+rw /dev/video*
 ```
+
 The andorcameralink.service is enable by
 ``` bash
 systemctl enable andorcameralink.service
 ```
+
 The offical examples can run.
 
 

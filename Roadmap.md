@@ -1,27 +1,28 @@
 # ColorMapping 1.0
 
-| Feature | Status | Comments
-|---------|--------|-----------
-|Install Andor3 SDK  | Yes |
-|Install Lima        | work in progress |
-|GUI design | work in progress |
-
+|      Feature       |       Status     | Comments   
+|--------------------|------------------|------------
+|Install Andor3 SDK  | Yes    		      |             
+|Install Lima        | work in progress |             
+|GUI design          | work in progress |             
+|Experiment record   | work in progress | date, experiment design, capture par  
 
 # ColorMapping 2.0
-| Feature    | Status   | Comments 
-|------------|----------|---------
-|pip install | no start |
+
+| 	Feature           | Status   | Comments
+|---------------------|----------|---------
+|pip install	        | no start |
+|objective roi widget | no start |
+|Track 	     	        | 	       | With help form Prof.Fan
+|add Keyborard keyword|
+
 
 # To Do
-[] 8. keyboard keyword
 
 [] 7. 进度条（QProgressBar）
 
-[] 6. Data store with date
-
-[] 5.widget组件提供气泡帮助提示框。
-
 [] 4. Test the new Andor SDK3
+
 [] 3. Transfer the various of postions
 
 [x] 2. Create 1024x786 fullscreen windown
