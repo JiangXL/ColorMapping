@@ -94,6 +94,7 @@ export PYTHONPATH=$PYTHONPATH:<my-new-install-dir>
 
 # Reading More
 
++ [PyQtGraph](http://www.pyqtgraph.org/)
 + [Bitflow SDK Introduction]( www.bitflow.com/products/details/third-party-software)
 + [Bitflow Downloads](www.bitflow.com/products/downloads )
 + [NikonTi hardware triggering](https://github.com/vanNimwegenLab/MiM_NikonTi/blob/master/Docs/NikonTi_hardware_triggering.md)
