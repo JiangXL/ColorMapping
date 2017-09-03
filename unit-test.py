@@ -1,27 +1,24 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 ### This script should be run after :
 ### export LD_LIBRARY_PATH="/usr/local/Lima/Lima/lib"
 
-
-
-### The aim is to test a version installed by
-###   INSTALL_DIR=/usr/local/Lima make install
-
 import os,sys,time
-## os.environ['LD_LIBRARY_PATH']="/usr/local/Lima/Lima/lib"
+from Lima import Core
+from Lima import Andor3
 
 print("* The general setup :")
 print("\n** The environement of the pocess is now : ")
 print(os.environ)
 
+
 print("\n** Now, importing Lima (Core and Andor3 :")
-#sys.path.insert(1, os.environ['LD_LIBRARY_PATH'] + "/../..")
 print("\twith sys.path = " + ":".join(sys.path))
-from Lima import Core,Andor3
+
 
 print("\n** Constructing the camera and the other related object :")
-cam = Andor3.Camera("/usr/local/andor/bitflow", 0)
+cam = Andor3.Camera("/usr/local/bf", 0)
 cam_int = Andor3.Interface(cam)
 cam_ctr = Core.CtControl(cam_int)
 
@@ -33,7 +30,7 @@ cam_sav = cam_ctr.saving()
 cam_sav.setDirectory("/mnt/DataHub3/iGEM/20170903/camera")
 cam_sav.setPrefix("testing")
 cam_sav.setSavingMode(Core.CtSaving.Manual)
-
+# Manual: No automatic saving, you should call CtSaving::writeFrame
 print(cam_sav.getParameters())
 
 print("** Testing the ROI : 100, 100, 2360, 1960 (in HardOnly mode)")
@@ -57,21 +54,21 @@ cam_acq = cam_ctr.acquisition()
 print("Setting the trigger mode to internal :")
 cam_acq.setTriggerMode(Core.IntTrig)
 print("setting the exposition time to 0.001 ...")
-cam_acq.setAcqExpoTime(.001)
+cam_acq.setAcqExpoTime(.01)
 print("*** Getting in slow acquisition mode :")
 print("setting the true camera speed to Global shutter and 100MHz")
 cam.setElectronicShutterMode(Andor3.Camera.Global)
 cam.setAdcRate(cam.MHz100)
-print("the range of latency time for the hardware is now %.3f to %.3f s" % cam.getLatTimeRange())
+#print("the range of latency time for the hardware is now %.3f to %.3f s" % cam.getLatTimeRange())
 print("setting the latency time to 0.015 (below the limit of the hardware")
 cam_acq.setLatencyTime(.015)
 print("retrieving the values : ")
 print("\texpo time = %f" % cam_acq.getAcqExpoTime())
-print("\tlat time = %f" % cam_acq.getLatencyTime())
-if ( 0.015 != cam_acq.getLatencyTime() ) :
-    print("\t The retrieved latency is different from the set one (expected)")
-if ( cam.getLatTimeRange()[0] != cam_acq.getLatencyTime() ) :
-    print("\t The retrieved latency time is DIFFERENT from the min latency of the hardware, %.3f vs. %.3f respectively" % (cam_acq.getLatencyTime(), cam.getLatTimeRange()[0]))
+#print("\tlat time = %f" % cam_acq.getLatencyTime())
+#if ( 0.015 != cam_acq.getLatencyTime() ) :
+    #print("\t The retrieved latency is different from the set one (expected)")
+#if ( cam.getLatTimeRange()[0] != cam_acq.getLatencyTime() ) :
+#    print("\t The retrieved latency time is DIFFERENT from the min latency of the hardware, %.3f vs. %.3f respectively" % (cam_acq.getLatencyTime(), cam.getLatTimeRange()[0]))
 
 print("\nTesting the ROI : 100, 100, 2360, 1960")
 cam_ctr.image().setRoi(Core.Roi(100, 100, 2360, 1960))  ### left, top, width, height
@@ -82,20 +79,20 @@ print("*** Getting in fast acquisition mode :")
 print("setting the true camera speed to Global shutter and 280MHz")
 cam.setElectronicShutterMode(Andor3.Camera.Global)
 cam.setAdcRate(cam.MHz280)
-print("the range of latency time for the hardware is now %.3f to %.3f s" % cam.getLatTimeRange())
+#print("the range of latency time for the hardware is now %.3f to %.3f s" % cam.getLatTimeRange())
 print("setting the latency time to 0.015 (below the limit of the hardware")
 cam_acq.setLatencyTime(.015)
 print("retrieving the values : ")
 print("\texpo time = %f" % cam_acq.getAcqExpoTime())
-print("\tlat time = %f" % cam_acq.getLatencyTime())
-if ( 0.015 != cam_acq.getLatencyTime() ) :
-    print("\t The retrieved latency is DIFFERENT from the set one (unexpected in fast mode)")
-if ( cam.getLatTimeRange()[0] != cam_acq.getLatencyTime() ) :
-    print("\t The retrieved latency time is DIFFERENT from the min latency of the hardware, %.3f vs. %.3f respectively" % (cam_acq.getLatencyTime(), cam.getLatTimeRange()[0]))
+#print("\tlat time = %f" % cam_acq.getLatencyTime())
+#if ( 0.015 != cam_acq.getLatencyTime() ) :
+#    print("\t The retrieved latency is DIFFERENT from the set one (unexpected in fast mode)")
+#if ( cam.getLatTimeRange()[0] != cam_acq.getLatencyTime() ) :
+#    print("\t The retrieved latency time is DIFFERENT from the min latency of the hardware, %.3f vs. %.3f respectively" % (cam_acq.getLatencyTime(), cam.getLatTimeRange()[0]))
 
 print("* Testing some frame-number based acquisitions")
 # print("  Setting the debug to tracing on camera:")
-# Core.DebParams.setTypeFlagsNameList(['Fatal', 'Error', 'Warning', 'Trace'])
+# Core.DebParams.setTypeFlagsNamecam_ctrList(['Fatal', 'Error', 'Warning', 'Trace'])
 # Core.DebParams.setModuleFlagsNameList(['Camera'])
 
 print("  Acquiring 3 images, to flush the CtAcquisition and the frame-rate be updated accordingly")
@@ -113,7 +110,7 @@ cam_sav.setDirectory("/mnt/DataHub3/iGEM/20170903/camera")
 cam_sav.setPrefix("testing")
 print("  The saving parameters are :")
 print(cam_sav.getParameters())
-cam_ctr.video().startLive()
+#cam_ctr.video().startLive()
 
 print("   Launching acquisition of %d frames whith exposure time of %.3fs and latency time %.3fs." % (cam_ctr.acquisition().getAcqNbFrames(),  cam_acq.getAcqExpoTime(), cam_acq.getLatencyTime()))
 
