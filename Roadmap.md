@@ -3,9 +3,11 @@
 |      Feature       |       Status     | Comments   
 |--------------------|------------------|------------
 |Install Andor3 SDK  | Yes    		      |             
-|Install Lima        | work in progress |             
+|Install Lima        | Yes              |             
 |GUI design          | work in progress |             
 |Experiment record   | work in progress | date, experiment design, capture par  
+|System name pictures| work in progress |
+
 
 # ColorMapping 2.0
 
@@ -16,16 +18,14 @@
 |Track 	     	        | 	       | With help form Prof.Fan
 |add Keyborard keyword|
 |Use os to manage file|
-
+|Control the lumencor |           
 
 # To Do
 
 [] 7. 进度条（QProgressBar）
 
-[] 4. Test the new Andor SDK3
 
 [] 3. Transfer the various of postions
 
-[x] 2. Create 1024x786 fullscreen windown
 
 [] 1. Get and store the postions form preview window: Projector edge, ROIs

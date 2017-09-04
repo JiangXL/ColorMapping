@@ -94,15 +94,11 @@ export PYTHONPATH=$PYTHONPATH:<my-new-install-dir>
 
 ## Install
 
-# Reading More
+
+# Refences
 
 + [PyQtGraph](http://www.pyqtgraph.org/)
-+ [Bitflow SDK Introduction]( www.bitflow.com/products/details/third-party-software)
-+ [Bitflow Downloads](www.bitflow.com/products/downloads )
-+ [NikonTi hardware triggering](https://github.com/vanNimwegenLab/MiM_NikonTi/blob/master/Docs/NikonTi_hardware_triggering.md)
 + [Lima  with andor sdk3](http://lima.blissgarden.org/camera/andor3/doc/index.html?highlight=andor3)
-+ [python andor](https://pypi.python.org/pypi/andor)
-+ [PyQt](https://wiki.python.org/moin/PyQt)
 + [Andor sdk3 Micro-manager](https://micro-manager.org/wiki/AndorSDK3)
 
 # License
