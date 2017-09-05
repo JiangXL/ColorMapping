@@ -14,13 +14,11 @@ cam = Andor3.Camera("/usr/local/bf", 0) # I don't kown what about Zyla USB3.0 W
 cam_int = Andor3.Interface(cam)
 cam_ctr = Core.CtControl(cam_int)
 
-
-
 ## camera setting
 cam_ctr.image().setMode(Core.CtImage.HardOnly)
 cam_ctr.image().setRoi(Core.Roi(0, 0, 2048, 2048)) ### left, top, width, height
 
-cam_ctr.acquisition().setAcqExpoTime(.001)
+cam_ctr.acquisition().setAcqExpoTime(.01)
 
 
 print ("expo time= %f s" % cam_ctr.acquisition().getAcqExpoTime())
@@ -61,24 +59,19 @@ def seq_capt():
 
 
 def live():
-  #cam_ctr.video().startLive()
-  #time.sleep(30)
-  #cam_ctr.video().stopLive()
+
   cam.setElectronicShutterMode(Andor3.Camera.Global)
   cam.setAdcRate(cam.MHz280)
   cam_ctr.acquisition().setLatencyTime(.015)
   cam.setNbFrames(1)
 
-  #cam_ctr.prepareAcq()
-  #cam_ctr.startAcq()
-  cam_ctr.video().startLive()
+  cam_ctr.prepareAcq()
+  cam_ctr.startAcq()
+  #cam_ctr.video().startLive()
   #time.sleep(0.0001)
-  cam_ctr.video().stopLive()
-
+  #cam_ctr.video().stopLive() what is difference?
   while cam_ctr.getStatus().AcquisitionStatus: pass
-  #print (cam_ctr.ReadImage().buffer)
   return cam_ctr.ReadImage().buffer
-  cam_ctr.video().stopLive()
 
-live()
+#live()
 #seq_capt()

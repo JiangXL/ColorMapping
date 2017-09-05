@@ -3,11 +3,11 @@
 |      Feature       |       Status     | Comments   
 |--------------------|------------------|------------
 |Install Andor3 SDK  | Yes    		      |             
-|Install Lima        | Yes              |             
+|Install Lima        | Yes              | 20170830            
 |GUI design          | work in progress |             
 |Experiment record   | work in progress | date, experiment design, capture par  
 |System name pictures| work in progress |
-
+|Static image        | work in progress |
 
 # ColorMapping 2.0
 
@@ -15,10 +15,14 @@
 |---------------------|----------|---------
 |pip install	        | no start |
 |objective roi widget | no start |
-|Track 	     	        | 	       | With help form Prof.Fan
-|add Keyborard keyword|
-|Use os to manage file|
-|Control the lumencor |           
+|Track 	     	        | no start | With help form Prof.Fan
+|add Keyborard keyword| no start |
+|Use os to manage file| no star  |
+|Control the lumencor | no star  |          
+|Show graph like confocal|  no start |
+|Acculate the fps of camera | no start ||
+|Use xml design GUI   |
+|dynamacis iamge      | no start  |
 
 # To Do
 

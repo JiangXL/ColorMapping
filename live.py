@@ -15,7 +15,7 @@ app = QtGui.QApplication([])
 ## Create window with GraphicsView widget
 win = pg.GraphicsLayoutWidget()
 win.show()  ## show widget alone in its own window
-win.setWindowTitle('Live')
+win.setWindowTitle('Live-iGEM 2017')
 view = win.addViewBox()
 
 ## lock the aspect ratio so pixels are always square
@@ -31,7 +31,7 @@ view.addItem(img)
 ## Create random image
 
 
-#data = np.random.normal(size=(15, 2048, 2048), loc=1024, scale=64).astype(np.uint16)
+#data = np.random.normal(size=(15, 1920, 1200), loc=1024, scale=64).astype(np.uint16)
 i = 0
 
 updateTime = ptime.time()
@@ -45,7 +45,7 @@ def updateData():
     data = camera.live()
     img.setImage(data)
 
-    #i = (i+1)% data.shape[0]
+#    i = (i+1)% data.shape[0]
 
     QtCore.QTimer.singleShot(1, updateData)
     now = ptime.time()

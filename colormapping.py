@@ -6,12 +6,14 @@ Programe to light the C.elegans
 """
 
 import sys
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QPainter,QColor, QPen
 from PyQt5.QtWidgets import(QWidget, QHBoxLayout, QFrame, QPushButton,
         QApplication, QGridLayout, QLineEdit, QCheckBox, QSlider, QLabel,
         QSplitter)
-
+import pyqtgraph as pg
+import pyqtgraph.ptime as ptime
+import numpy as np
 ################################################################################
 #                                                                              #
 #                              1. Control Launch Pad                           #
@@ -20,24 +22,30 @@ from PyQt5.QtWidgets import(QWidget, QHBoxLayout, QFrame, QPushButton,
 class mainWindow(QWidget):
     def __init__(self, parent=None):
         super(mainWindow, self).__init__(parent)
-        self.setWindowTitle('Control Pad')
+        self.setWindowTitle('Control Pad  -- iGEM_ShenZhen 2017')
         self.setGeometry(600, 600, 900, 600)
-
+        self.setAutoFillBackground(True) # Set Window background be black
+        p = self.palette()
+        p.setColor(self.backgroundRole(),QColor(0,0,0))
+        self.setPalette(p)
         mainbox = QHBoxLayout(self)
 
         # open Camera and set map to fullscreen and black backgram
         preview_button   = QPushButton(u'Preview', self)
-        self.canvas = canvas()
-        self.canvas.show()
-        preview_button.clicked.connect(self.canvas.showFullScreen)
+        self.maplive = maplive()
+        self.maplive.show()
+        self.maplive.updateData()
+        #self.canvas = canvas()
+        #self.canvas.show()
+        #preview_button.clicked.connect(self.canvas.showFullScreen)
         preview_button.setToolTip('Fullscreen map and open camera')
 
-        # Power on the projector and projecte image 
+        # Power on the projector and projecte image
         stimulate_button = QPushButton('Stimulate',self)  # Check the projector
         stimulate_button.setToolTip('Power on the projector and projecte image')
 
         # Start Capture
-        capture_button   = QPushButton('Capture',self) 
+        capture_button   = QPushButton('Capture',self)
         capture_button.setToolTip('Capture the image sequence')
 
         control_box = QHBoxLayout()
@@ -46,14 +54,16 @@ class mainWindow(QWidget):
         control_box.addWidget(capture_button)
 
         roi_box = QGridLayout()
-        roi_1 = QPushButton("ROT 1") # Start pyqtgraph ROI 
+        roi_1 = QPushButton("ROT 1") # Start pyqtgraph ROI
         roi_box.addWidget(QLineEdit("Red"),0,2)
         roi_box.addWidget(QPushButton("ROI 1"),0,0)
         roi_box.addWidget(QCheckBox("Red"),0,1)
         roi_box.addWidget(QCheckBox("Blue"),0,3)
         roi_box.addWidget(QLineEdit("Blue"),0,4) #Send to map.addroi
 
-        roi_2 = QPushButton("ROT 2") # 
+        roi_2 = QPushButton("ROT 2") #        p = self.palette()
+        p.setColor(self.backgroundRole(),QColor(0,0,0))
+        self.setPalette(p)
         roi_box.addWidget(QPushButton("ROI 2"),1,0)
         roi_box.addWidget(QCheckBox("Red"),1,1)
         roi_box.addWidget(QLineEdit("Red"),1,2)
@@ -107,11 +117,12 @@ class mainWindow(QWidget):
 #                           2.ROI Pad                                         #
 #                                                                             #
 ###############################################################################
+
 class canvas(QWidget):
     def __init__(self, parent = None):
         super(canvas, self).__init__(parent)
         self.setGeometry(300, 300, 900, 600)
-        self.setAutoFillBackground(True) # Set Window background be black 
+        self.setAutoFillBackground(True) # Set Window background be black
         p = self.palette()
         p.setColor(self.backgroundRole(),QColor(0,0,0))
         self.setPalette(p)
@@ -137,12 +148,49 @@ class canvas(QWidget):
 
 
 
-def main():
+#####################################################
+class maplive(pg.GraphicsLayoutWidget):
+    def __init__(self, parent = None):
+        super(maplive,self).__init__(parent)
+        self.setWindowTitle("Light the life")
+        view = self.addViewBox()
+
+        view.setAspectLocked(True)
+
+
+    def updateData(self, parent= None):
+        global img, data, i, updateTime, fps
+
+        img = pg.ImageItem(border='w')
+        view.addItem(img)
+        data = np.random.normal(size=(15, 1920, 1200), loc=1024, scale=64).astype(np.uint16)
+
+        i = 0
+
+        updateTime = ptime.time()
+        fps = 0
+
+        img.setImage(data[i])
+
+        i = (i+1)%data.shape[0]
+        QTimer.singleShot(1,updateData)
+        now = ptime.time()
+        fps2 = 1.0 / (now - updateTime)
+        updateTime =now
+        fps = fps*0.9 + fps2*0.1
+
+        print ("%0.1f fps" % fps)
+
+    #updateData()
+
+
+
+
+
+
+
+if __name__ == '__main__':
     app = QApplication(sys.argv)
     mainwindow = mainWindow()
     mainwindow.show()
     app.exec_()
-
-
-if __name__ == '__main__':
-    main()

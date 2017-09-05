@@ -95,7 +95,7 @@ export PYTHONPATH=$PYTHONPATH:<my-new-install-dir>
 ## Install
 
 
-# Refences
+# References
 
 + [PyQtGraph](http://www.pyqtgraph.org/)
 + [Lima  with andor sdk3](http://lima.blissgarden.org/camera/andor3/doc/index.html?highlight=andor3)
