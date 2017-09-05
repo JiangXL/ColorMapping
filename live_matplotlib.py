@@ -5,7 +5,7 @@ import time
 
 cam = Andor3.Camera("/usr/local/andor/bitflow", 0)
 cam_int = Andor3.Interface(cam)
-cam_ctr = Core.CtControl(cam_int)TkAgg
+cam_ctr = Core.CtControl(cam_int)
 
 
 
@@ -13,7 +13,7 @@ cam_ctr = Core.CtControl(cam_int)TkAgg
 ## Proper way of doing that is :
 cam_ctr.acquisition().setAcqExpoTime(.001)
 cam_ctr.acquisition().setLatencyTime(.001)
-cam_ctr.image().setMode(Core.CtImage.HardOnly)live_test
+cam_ctr.image().setMode(Core.CtImage.HardOnly)
 ##cam_ctr.image().setMode(Core.CtImage.HardAndSoft)
 cam_ctr.image().setRoi(Core.Roi(0, 0, 2048, 2048))  ### left, top, width, height
 

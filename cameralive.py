@@ -11,12 +11,17 @@ import pyqtgraph.ptime as ptime
 import camera
 
 app = QtGui.QApplication([])
+pg.setConfigOption('background','b')
+#pg.setConfigOption('useOpenGL',True)
 
 ## Create window with GraphicsView widget
 win = pg.GraphicsLayoutWidget()
-win.show()  ## show widget alone in its own window
-win.setWindowTitle('Live-iGEM 2017')
+
 view = win.addViewBox()
+win.setCentralWidget(view)
+win.show()  ## show widget alone in its own window
+#win.showFullScreen()
+win.setWindowTitle('Live-iGEM 2017')
 
 ## lock the aspect ratio so pixels are always square
 view.setAspectLocked(True)
@@ -26,11 +31,9 @@ img = pg.ImageItem(border='w')
 view.addItem(img)
 
 ## Set initial view bounds
-#view.setRange(QtCore.QRectF(0, 0, 600, 600))
+#view.setRange(QtCore.QRectF(0, 0, 1920, 1200))
 
 ## Create random image
-
-
 #data = np.random.normal(size=(15, 1920, 1200), loc=1024, scale=64).astype(np.uint16)
 i = 0
 
@@ -40,13 +43,8 @@ fps = 0
 def updateData():
     global img, data, i, updateTime, fps
 
-    ## Display the data
-#    img.setImage(data[i])
     data = camera.live()
     img.setImage(data)
-
-#    i = (i+1)% data.shape[0]
-
     QtCore.QTimer.singleShot(1, updateData)
     now = ptime.time()
     fps2 = 1.0 / (now-updateTime)

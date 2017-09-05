@@ -14,6 +14,8 @@ from PyQt5.QtWidgets import(QWidget, QHBoxLayout, QFrame, QPushButton,
 import pyqtgraph as pg
 import pyqtgraph.ptime as ptime
 import numpy as np
+
+#import live
 ################################################################################
 #                                                                              #
 #                              1. Control Launch Pad                           #
@@ -23,7 +25,7 @@ class mainWindow(QWidget):
     def __init__(self, parent=None):
         super(mainWindow, self).__init__(parent)
         self.setWindowTitle('Control Pad  -- iGEM_ShenZhen 2017')
-        self.setGeometry(600, 600, 900, 600)
+        self.setGeometry(0, 0, 1900, 1200)
         self.setAutoFillBackground(True) # Set Window background be black
         p = self.palette()
         p.setColor(self.backgroundRole(),QColor(0,0,0))
@@ -32,9 +34,6 @@ class mainWindow(QWidget):
 
         # open Camera and set map to fullscreen and black backgram
         preview_button   = QPushButton(u'Preview', self)
-        self.maplive = maplive()
-        self.maplive.show()
-        self.maplive.updateData()
         #self.canvas = canvas()
         #self.canvas.show()
         #preview_button.clicked.connect(self.canvas.showFullScreen)
@@ -42,7 +41,7 @@ class mainWindow(QWidget):
 
         # Power on the projector and projecte image
         stimulate_button = QPushButton('Stimulate',self)  # Check the projector
-        stimulate_button.setToolTip('Power on the projector and projecte image')
+        stimulate_button.setToolTip('Projecte image')
 
         # Start Capture
         capture_button   = QPushButton('Capture',self)
@@ -149,41 +148,6 @@ class canvas(QWidget):
 
 
 #####################################################
-class maplive(pg.GraphicsLayoutWidget):
-    def __init__(self, parent = None):
-        super(maplive,self).__init__(parent)
-        self.setWindowTitle("Light the life")
-        view = self.addViewBox()
-
-        view.setAspectLocked(True)
-
-
-    def updateData(self, parent= None):
-        global img, data, i, updateTime, fps
-
-        img = pg.ImageItem(border='w')
-        view.addItem(img)
-        data = np.random.normal(size=(15, 1920, 1200), loc=1024, scale=64).astype(np.uint16)
-
-        i = 0
-
-        updateTime = ptime.time()
-        fps = 0
-
-        img.setImage(data[i])
-
-        i = (i+1)%data.shape[0]
-        QTimer.singleShot(1,updateData)
-        now = ptime.time()
-        fps2 = 1.0 / (now - updateTime)
-        updateTime =now
-        fps = fps*0.9 + fps2*0.1
-
-        print ("%0.1f fps" % fps)
-
-    #updateData()
-
-
 
 
 

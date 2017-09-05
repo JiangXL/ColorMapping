@@ -8,6 +8,8 @@
 |Experiment record   | work in progress | date, experiment design, capture par  
 |System name pictures| work in progress |
 |Static image        | work in progress |
+|Chose ROI with crosshair| work in progress| choose two points and show  roi
+|Use spinbox to adjust|                 |
 
 # ColorMapping 2.0
 
@@ -23,7 +25,8 @@
 |Acculate the fps of camera | no start ||
 |Use xml design GUI   |
 |dynamacis iamge      | no start  |
-
+|multiprocessor module| designing |
+| use OpenGL acculate |
 # To Do
 
 [] 7. 进度条（QProgressBar）

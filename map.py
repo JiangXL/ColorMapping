@@ -10,12 +10,16 @@ Image matrix with ROI for projecting
 import sys
 import numpy as np
 
-image = np.array
 
 # 1920x1200 00
+image = np.zeros((1920,1200,3),dtype=np.uint8)
 
 
 # each element is [ R G B]
+#def setROI():
+
 
 
 # generate new matrix
+def getImage():
+  return image

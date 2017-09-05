@@ -98,6 +98,7 @@ export PYTHONPATH=$PYTHONPATH:<my-new-install-dir>
 # References
 
 + [PyQtGraph](http://www.pyqtgraph.org/)
++ [PyQtGraph API](http://www.pyqtgraph.org/documentation/apireference.html)
 + [Lima  with andor sdk3](http://lima.blissgarden.org/camera/andor3/doc/index.html?highlight=andor3)
 + [Andor sdk3 Micro-manager](https://micro-manager.org/wiki/AndorSDK3)
 
