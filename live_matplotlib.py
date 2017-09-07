@@ -1,14 +1,10 @@
 import sys,time,os
-sys.path.insert(1, os.environ['LD_LIBRARY_PATH']+"/../..")
 from Lima import Core,Andor3
-import time
+
 
 cam = Andor3.Camera("/usr/local/andor/bitflow", 0)
 cam_int = Andor3.Interface(cam)
 cam_ctr = Core.CtControl(cam_int)
-
-
-
 
 ## Proper way of doing that is :
 cam_ctr.acquisition().setAcqExpoTime(.001)

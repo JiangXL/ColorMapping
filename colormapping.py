@@ -11,11 +11,9 @@ from PyQt5.QtGui import QPainter,QColor, QPen
 from PyQt5.QtWidgets import(QWidget, QHBoxLayout, QFrame, QPushButton,
         QApplication, QGridLayout, QLineEdit, QCheckBox, QSlider, QLabel,
         QSplitter)
-import pyqtgraph as pg
-import pyqtgraph.ptime as ptime
-import numpy as np
 
-#import live
+import numpy as np
+from maplive import *
 ################################################################################
 #                                                                              #
 #                              1. Control Launch Pad                           #
