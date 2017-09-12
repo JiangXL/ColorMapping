@@ -27,7 +27,14 @@
 |dynamacis iamge      | no start  |
 |multiprocessor module| designing |
 | use OpenGL acculate |
+
+# ColorMapping 3.0
+
+|      Feature | Status | Comments
+| Using C/C++ |
 # To Do
+
+
 
 [] 7. 进度条（QProgressBar）
 

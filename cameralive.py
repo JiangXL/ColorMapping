@@ -16,7 +16,6 @@ pg.setConfigOption('background','b')
 
 ## Create window with GraphicsView widget
 win = pg.GraphicsLayoutWidget()
-
 view = win.addViewBox()
 win.setCentralWidget(view)
 win.show()  ## show widget alone in its own window
@@ -43,6 +42,7 @@ fps = 0
 def updateData():
     global img, data, i, updateTime, fps
 
+    #data = np.transpose(camera.live())
     data = camera.live()
     img.setImage(data)
     QtCore.QTimer.singleShot(1, updateData)

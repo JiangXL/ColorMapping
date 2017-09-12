@@ -4,7 +4,7 @@ Demonstrates very basic use of ImageItem to display image data
 inside a ViewBox.
 """
 
-
+import sys,getopt # trans the parameter
 from pyqtgraph.Qt import QtCore, QtGui
 import numpy as np
 import pyqtgraph as pg
@@ -22,27 +22,21 @@ view = win.addViewBox(enableMouse=False, lockAspect=True)
 view.disableAutoRange()
 win.setCentralWidget(view) # close the edge bettwen img and window
 win.setGeometry(0,0,1920,1200)
-win.show()  ## show widget alone in its own window
-#win.showFullScreen()
 win.setWindowTitle('Live-iGEM 2017')
 
-
+## Fullscreen or windos
+if sys.argv[1] == "-pre":
+    win.show()# show widget alone in its own window
+elif sys.argv[1] in ("-full"):
+    win.showFullScreen()
+    
 ## Create image item
 img = pg.ImageItem(border='w')
 img.setPxMode(True)
-
 view.addItem(img)
 view.setLimits(xMin=0,xMax=1920,yMin=-1200,yMax=0)
 # Set the initial point is (0,0)
 
-image = np.zeros((1920,1200,3),dtype=np.uint8)
-
-# Add Roi to image
-def setRoi(x_start,x_end, y_start, y_end, r, g, b):
-    image[x_start:x_end, y_start:y_end, 0]=r
-    image[x_start:x_end, y_start:y_end, 1]=g
-    image[x_start:x_end, y_start:y_end, 2]=b
-    #np.save("image.npy", image.reshape(1920, 1200,3))
 
 i = 0
 updateTime = ptime.time()
@@ -52,7 +46,7 @@ def updateData():
     global img, data, i, updateTime, fps
 
     ## Display the data
-    img.setImage(image)
+    img.setImage(map.getImage())
 
     QtCore.QTimer.singleShot(1, updateData)
     now = ptime.time()
