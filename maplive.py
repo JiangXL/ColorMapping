@@ -14,7 +14,7 @@ import map
 
 app = QtGui.QApplication([])
 pg.setConfigOption('background','b')
-#pg.setConfigOption('useOpenGL',True)
+pg.setConfigOption('useOpenGL',True)
 
 ## Create window with GraphicsView widget
 win = pg.GraphicsLayoutWidget()
@@ -29,7 +29,7 @@ if sys.argv[1] == "-pre":
     win.show()# show widget alone in its own window
 elif sys.argv[1] in ("-full"):
     win.showFullScreen()
-    
+
 ## Create image item
 img = pg.ImageItem(border='w')
 img.setPxMode(True)

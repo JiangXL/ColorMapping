@@ -33,7 +33,7 @@ class mainWindow(QWidget):
         preview_button   = QPushButton(u'Preview', self)
         #self.canvas = canvas()
         #self.canvas.show()
-        preview_button.clicked.connect(os.system('python maplive.py -pre'))       
+        #preview_button.clicked.connect(os.system('python maplive.py -pre'))       
         #preview_button.clicked.connect(self.canvas.showFullScreen)
 
 
