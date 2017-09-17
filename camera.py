@@ -18,14 +18,15 @@ cam_ctr = Core.CtControl(cam_int)
 cam_ctr.image().setMode(Core.CtImage.HardOnly)
 cam_ctr.image().setRoi(Core.Roi(0, 0, 2048, 2048)) ### left, top, width, height
 
-cam_ctr.acquisition().setAcqExpoTime(.01)
 
+def setExpoTime(time):
+    expoTime = time
+    cam_ctr.acquisition().setAcqExpoTime(expoTime)
 
 print ("expo time= %f s" % cam_ctr.acquisition().getAcqExpoTime())
 
-
 def seq_capt():
-  cam_ctr.acquisition().setLatencyTime(.015) # I don't kown limit of hardware
+  cam_ctr.acquisition().setLatencyTime(1.2) # I don't kown limit of hardware
   #cam_ctr.acquisition().setAcqNbFrames(10)
   ## saving pathway
   cam_sav = cam_ctr.saving()
@@ -59,6 +60,7 @@ def seq_capt():
 
 
 def live():
+  print ("expo time= %f s" % cam_ctr.acquisition().getAcqExpoTime())
 
   cam.setElectronicShutterMode(Andor3.Camera.Global)
   cam.setAdcRate(cam.MHz280)

@@ -5,130 +5,70 @@
 Programe to light the C.elegans
 """
 
-import sys
-import os
-from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtGui import QPainter,QColor, QPen
-from PyQt5.QtWidgets import(QWidget, QHBoxLayout, QFrame, QPushButton,
-        QApplication, QGridLayout, QLineEdit, QCheckBox, QSlider, QLabel,
-        QSplitter)
+from pyqtgraph import GraphicsView
+from pyqtgraph.Qt import QtGui, QtCore, USE_PYQT5
 import numpy as np
-################################################################################
-#                                                                              #
-#                              1. Control Launch Pad                           #
-#                                                                              #
-################################################################################
-class mainWindow(QWidget):
-    def __init__(self, parent=None):
-        super(mainWindow, self).__init__(parent)
-        self.setWindowTitle('Control Pad  -- iGEM_ShenZhen 2017')
-        self.setGeometry(0, 0, 1900, 1200)
-        self.setAutoFillBackground(True) # Set Window background be black
-        p = self.palette()
-        p.setColor(self.backgroundRole(),QColor(0,0,0))
-        self.setPalette(p)
-        mainbox = QHBoxLayout(self)
+import pyqtgraph as pg
+import pyqtgraph.ptime as ptime
+import homeui
+import camera
 
-        # open Camera and set map to fullscreen and black backgram
-        preview_button   = QPushButton(u'Preview', self)
-        #self.canvas = canvas()
-        #self.canvas.show()
-        #preview_button.clicked.connect(os.system('python maplive.py -pre'))       
-        #preview_button.clicked.connect(self.canvas.showFullScreen)
+#QtGui.QApplication.setGraphicsSystem('raster')
+app = QtGui.QApplication([])
 
+win = QtGui.QMainWindow()
+win.setWindowTitle('Light for Life -- iGEM 2017')
+ui = homeui.Ui_MainWindow()
+ui.setupUi(win)
+win.show()
 
-        preview_button.setToolTip('Fullscreen map and open camera')
+# For exp time
 
-        # Power on the projector and projecte image
-        stimulate_button = QPushButton('Stimulate',self)  # Check the projector
-        stimulate_button.setToolTip('Projecte image')
+#ui.maxSpin1.setOpts(value=255, step=1)
+#ui.minSpin1.setOpts(value=0, step=1)
 
-        # Start Capture
-        capture_button   = QPushButton('Capture',self)
-        capture_button.setToolTip('Capture the image sequence')
+#ui.graphicsView.useOpenGL()  ## buggy, but you can try it if you need extra speed.
 
-        control_box = QHBoxLayout()
-        control_box.addWidget(preview_button)
-        control_box.addWidget(stimulate_button)
-        control_box.addWidget(capture_button)
+vb = pg.ViewBox()
+ui.graphicsView.setCentralItem(vb)
+vb.setAspectLocked()
+img = pg.ImageItem()
+vb.addItem(img)
 
-        roi_box = QGridLayout()
-        roi_1 = QPushButton("ROT 1") # Start pyqtgraph ROI
-        roi_box.addWidget(QLineEdit("Red"),0,2)
-        roi_box.addWidget(QPushButton("ROI 1"),0,0)
-        roi_box.addWidget(QCheckBox("Red"),0,1)
-        roi_box.addWidget(QCheckBox("Blue"),0,3)
-        roi_box.addWidget(QLineEdit("Blue"),0,4) #Send to map.addroi
-
-        roi_2 = QPushButton("ROT 2") #        p = self.palette()
-        p.setColor(self.backgroundRole(),QColor(0,0,0))
-        self.setPalette(p)
-        roi_box.addWidget(QPushButton("ROI 2"),1,0)
-        roi_box.addWidget(QCheckBox("Red"),1,1)
-        roi_box.addWidget(QLineEdit("Red"),1,2)
-        roi_box.addWidget(QCheckBox("Blue"),1,3)
-        roi_box.addWidget(QLineEdit("Blue"),1,4)
-
-
-        camera_box = QGridLayout()
-        camera_box.setSpacing(20)
-        camera_box.addWidget(QLabel("Expose_lab"),0,0)
-        camera_box.addWidget(QLineEdit(),0,1)
-        camera_box.addWidget(QSlider(Qt.Horizontal),0,2)
-        camera_box.addWidget(QLabel("Capture Seq"),1,0)
-        camera_box.addWidget(QLineEdit(),1,1)
-        camera_box.addWidget(QSlider(Qt.Horizontal),1,2)
-        camera_box.addWidget(QPushButton("Normal"),2,0)
-
-        video_frame = QFrame(self)
-        video_frame.setFrameShape(QFrame.StyledPanel)
-
-        control_frame = QFrame(self)
-        control_frame.setFrameShape(QFrame.StyledPanel)
-        control_frame.setLayout(control_box)
-
-        roi_frame = QFrame(self)
-        roi_frame.setFrameShape(QFrame.StyledPanel)
-        roi_frame.setLayout(roi_box)
-
-        camera_frame = QFrame(self)
-        camera_frame.setFrameShape(QFrame.StyledPanel)
-        camera_frame.setLayout(camera_box)
-
-
-        splitter1 = QSplitter(Qt.Vertical)
-        splitter1.addWidget(control_frame)
-        splitter1.addWidget(roi_frame)
-        splitter1.addWidget(camera_frame)
-
-        splitter2 = QSplitter(Qt.Horizontal)
-        splitter2.addWidget(video_frame)
-        splitter2.addWidget(splitter1)
-
-
-        mainbox.addWidget(splitter2)
-
-        self.setLayout(mainbox)
-
-
-###############################################################################
-#                                                                             #
-#                           2.ROI Pad                                         #
-#                                                                             #
-###############################################################################
+# Camera setting and Image Store
 
 
 
 
+ptr = 0
+lastTime = ptime.time()
+fps = None
+def update():
+    global ui, ptr, lastTime, fps, img
 
-#####################################################
+    expoTime = ui.spinBox_expo.value()/1000.000
+    camera.setExpoTime(expoTime)
+    print expoTime
+    img.setImage(camera.live())
+    ptr += 1
+    now = ptime.time()
+    dt = now - lastTime
+    lastTime = now
+    if fps is None:
+        fps = 1.0/dt
+    else:
+        s = np.clip(dt*3., 0, 1)
+        fps = fps * (1-s) + (1.0/dt) * s
+    print('%0.2f fps' % fps)
+    app.processEvents()  ## force complete redraw for every plot
+timer = QtCore.QTimer()
+timer.timeout.connect(update)
+timer.start(0)
 
 
 
-
-
+## Start Qt event loop unless running in interactive mode or using pyside.
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    mainwindow = mainWindow()
-    mainwindow.show()
-    app.exec_()
+    import sys
+    if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
+        QtGui.QApplication.instance().exec_()
