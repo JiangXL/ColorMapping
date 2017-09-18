@@ -15,10 +15,16 @@ np.save("image.npy", image.reshape(1920, 1200,3))
 #Here will trouble if write and read image.npy at the same time)
 # Need to reset image.npy
 
-# Add Roi to image
-def setRoi(x_start,x_end, y_start, y_end, r, g, b):
+# Input background, roi 1, roi 2 postions
+def posInput(bg, roi1, roi2):
+    print roi1
+    print bg[0]
+
+
+
+def setRoi(x_start,x_end, y_start, y_end, r, b):
+
     image[x_start:x_end, y_start:y_end, 0]=r
-    image[x_start:x_end, y_start:y_end, 1]=g
     image[x_start:x_end, y_start:y_end, 2]=b
     np.save("image.npy", image.reshape(1920, 1200,3))
 

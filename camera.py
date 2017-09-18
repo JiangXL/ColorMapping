@@ -8,7 +8,7 @@ Initation and configuration of Andor Zaly 5
 import time
 from Lima import Core,Andor3
 
-storepath = "/mnt/DataHub3/iGEM/"+time.strftime("%m%d", time.localtime())+"/"
+storepath = "/mnt/DataHub3/iGEM/"+time.strftime("%m%d", time.localtime())+"/"+time.strftime("%H",time.localtime())+"/"
 
 cam = Andor3.Camera("/usr/local/bf", 0) # I don't kown what about Zyla USB3.0 W
 cam_int = Andor3.Interface(cam)

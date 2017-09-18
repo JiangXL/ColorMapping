@@ -5,30 +5,24 @@
 Programe to light the C.elegans
 """
 
-from pyqtgraph import GraphicsView
 from pyqtgraph.Qt import QtGui, QtCore, USE_PYQT5
 import numpy as np
 import pyqtgraph as pg
 import pyqtgraph.ptime as ptime
 import homeui
 import camera
-
+import map
 #QtGui.QApplication.setGraphicsSystem('raster')
 app = QtGui.QApplication([])
 
 win = QtGui.QMainWindow()
-win.setWindowTitle('Light for Life -- iGEM 2017')
-ui = homeui.Ui_MainWindow()
+ui = homeui.Ui_MainWindow() # set ui
 ui.setupUi(win)
+win.setWindowTitle('Light for Life -- iGEM 2017')
 win.show()
 
-# For exp time
 
-#ui.maxSpin1.setOpts(value=255, step=1)
-#ui.minSpin1.setOpts(value=0, step=1)
-
-#ui.graphicsView.useOpenGL()  ## buggy, but you can try it if you need extra speed.
-
+#ui.graphicsView.useOpenGL()
 vb = pg.ViewBox()
 ui.graphicsView.setCentralItem(vb)
 vb.setAspectLocked()
@@ -36,6 +30,22 @@ img = pg.ImageItem()
 vb.addItem(img)
 
 # Camera setting and Image Store
+
+# ROI setting
+neuron_1 = pg.RectROI([1024,1344], [100,100])
+neuron_2 = pg.RectROI([1024,1000], [100,100])
+bg = pg.RectROI([0,0], [200,200])
+vb.addItem(neuron_1)
+vb.addItem(neuron_2)
+vb.addItem(bg)
+## handles scaling both vertically and horizontally
+neuron_1.addScaleHandle([1, 1], [0, 0])
+neuron_2.addScaleHandle([1, 1], [0, 0])
+bg.addScaleHandle([1,1], [0,0])
+neuron_1.addScaleHandle([0, 0], [1, 1])
+neuron_2.addScaleHandle([0, 0], [1, 1])
+bg.addScaleHandle([0,0], [1,1])
+
 
 
 ptr = 0
@@ -54,6 +64,14 @@ def update():
         img.setImage(camera.live())
     else:
         img.setImage(camera.live())
+
+    #print neuron_1.pos()
+    print neuron_1.parentBounds().getRect()
+    map.posInput(
+        bg.parentBounds().getRect(),
+        neuron_1.parentBounds().getRect(),
+        neuron_2.parentBounds().getRect()
+    )
 
     ptr += 1
     now = ptime.time()

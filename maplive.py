@@ -14,15 +14,19 @@ import map
 
 app = QtGui.QApplication([])
 pg.setConfigOption('background','b')
-pg.setConfigOption('useOpenGL',True)
+#pg.setConfigOption('useOpenGL',True)
+
+
+        #win.showFullScreen()
 
 ## Create window with GraphicsView widget
 win = pg.GraphicsLayoutWidget()
 view = win.addViewBox(enableMouse=False, lockAspect=True)
 view.disableAutoRange()
 win.setCentralWidget(view) # close the edge bettwen img and window
-win.setGeometry(0,0,1920,1200)
+win.setGeometry(10,10,1920,1200)
 win.setWindowTitle('Live-iGEM 2017')
+
 
 ## Fullscreen or windos
 if sys.argv[1] == "-pre":
@@ -57,6 +61,8 @@ def updateData():
     print ("%0.1f fps" % fps)
 
 updateData()
+
+
 
 ## Start Qt event loop unless running in interactive mode.
 if __name__ == '__main__':
