@@ -25,7 +25,7 @@ def setExpoTime(time):
 
 print ("expo time= %f s" % cam_ctr.acquisition().getAcqExpoTime())
 
-def seq_capt():
+def seq_capt(interval):
   cam_ctr.acquisition().setLatencyTime(1.2) # I don't kown limit of hardware
   #cam_ctr.acquisition().setAcqNbFrames(10)
   ## saving pathway
@@ -45,9 +45,12 @@ def seq_capt():
 
   the_wait=0
   while ( Core.AcqReady != cam_ctr.getStatus().AcquisitionStatus ) :
-    time.sleep(1)
-    the_wait += 1
-  print("Acquisition done with sleep of %ds"% (the_wait))
+    time.sleep(interval)
+    the_wait += interval
+  print("Acquisition done with sleep of %fs"% (the_wait))
+  while cam_ctr.getStatus().AcquisitionStatus: pass
+  return cam_ctr.ReadImage().buffer
+
   time.sleep(1) # What it mean?
   try:
     record = open(storepath+"log.txt", 'w')

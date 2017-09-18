@@ -38,8 +38,6 @@ vb.addItem(img)
 # Camera setting and Image Store
 
 
-
-
 ptr = 0
 lastTime = ptime.time()
 fps = None
@@ -49,7 +47,14 @@ def update():
     expoTime = ui.spinBox_expo.value()/1000.000
     camera.setExpoTime(expoTime)
     print expoTime
-    img.setImage(camera.live())
+
+    if  ui.radioButton_capture.isChecked():
+        img.setImage(camera.seq_capt(ui.spinBox_Interval.value()/1000.00))
+    elif ui.radioButton_pre.isChecked():
+        img.setImage(camera.live())
+    else:
+        img.setImage(camera.live())
+
     ptr += 1
     now = ptime.time()
     dt = now - lastTime
