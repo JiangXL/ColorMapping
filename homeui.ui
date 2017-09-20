@@ -58,32 +58,6 @@
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QLabel" name="label_neuron1">
-        <property name="geometry">
-         <rect>
-          <x>370</x>
-          <y>180</y>
-          <width>62</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Neuron1</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_neuron2">
-        <property name="geometry">
-         <rect>
-          <x>380</x>
-          <y>300</y>
-          <width>62</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Neuron2</string>
-        </property>
-       </widget>
       </widget>
      </item>
     </layout>
@@ -201,8 +175,8 @@
      <rect>
       <x>910</x>
       <y>220</y>
-      <width>269</width>
-      <height>183</height>
+      <width>312</width>
+      <height>217</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_3">
@@ -275,6 +249,13 @@
        </property>
       </widget>
      </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Add ROI</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="gridLayoutWidget_4">
@@ -326,12 +307,6 @@
      </item>
     </layout>
    </widget>
-   <zorder>gridLayoutWidget</zorder>
-   <zorder>horizontalLayoutWidget</zorder>
-   <zorder>gridLayoutWidget_3</zorder>
-   <zorder>gridLayoutWidget_2</zorder>
-   <zorder>gridLayoutWidget_3</zorder>
-   <zorder>gridLayoutWidget_4</zorder>
   </widget>
  </widget>
  <resources/>

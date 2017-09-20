@@ -7,6 +7,7 @@ Initation and configuration of Andor Zaly 5
 
 import time
 from Lima import Core,Andor3
+import numpy as np
 
 storepath = "/mnt/DataHub3/iGEM/"+time.strftime("%m%d", time.localtime())+"/"+time.strftime("%H",time.localtime())+"/"
 
@@ -16,7 +17,7 @@ cam_ctr = Core.CtControl(cam_int)
 
 ## camera setting
 cam_ctr.image().setMode(Core.CtImage.HardOnly)
-cam_ctr.image().setRoi(Core.Roi(0, 0, 2048, 2048)) ### left, top, width, height
+#cam_ctr.image().setRoi(Core.Roi(0, 0, 2560, 2160)) ### left, top, width, height
 
 
 def setExpoTime(time):
@@ -49,7 +50,7 @@ def seq_capt(interval):
     the_wait += interval
   print("Acquisition done with sleep of %fs"% (the_wait))
   while cam_ctr.getStatus().AcquisitionStatus: pass
-  return cam_ctr.ReadImage().buffer
+  return np.transpose(cam_ctr.ReadImage().buffer)
 
   time.sleep(1) # What it mean?
   try:
@@ -64,7 +65,7 @@ def seq_capt(interval):
 
 def live():
   print ("expo time= %f s" % cam_ctr.acquisition().getAcqExpoTime())
-
+  cam_ctr.acquisition().setAcqExpoTime(0.04)
   cam.setElectronicShutterMode(Andor3.Camera.Global)
   cam.setAdcRate(cam.MHz280)
   cam_ctr.acquisition().setLatencyTime(.015)
@@ -76,7 +77,7 @@ def live():
   #time.sleep(0.0001)
   #cam_ctr.video().stopLive() what is difference?
   while cam_ctr.getStatus().AcquisitionStatus: pass
-  return cam_ctr.ReadImage().buffer
+  return np.transpose(cam_ctr.ReadImage().buffer)
 
 #live()
 #seq_capt()

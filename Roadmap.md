@@ -7,9 +7,9 @@
 |GUI design          | work in progress |             
 |Experiment record   | work in progress | date, experiment design, capture par  
 |System name pictures| work in progress |
-|Static image        | work in progress |
+|Static image        | Yes              | 20170920
 |Chose ROI with crosshair| work in progress| choose two points and show  roi
-|Use spinbox to adjust|                 |
+|Use spinbox to adjust|Yes              | 20170920
 
 # ColorMapping 2.0
 
@@ -23,7 +23,7 @@
 |Control the lumencor | no star  |          
 |Show graph like confocal|  no start |
 |Acculate the fps of camera | no start ||
-|Use xml design GUI   |
+|Use xml design GUI   | Yes      |
 |dynamacis iamge      | no start  |
 |multiprocessor module| designing |
 | use OpenGL acculate |
@@ -32,6 +32,8 @@
 
 |      Feature | Status | Comments
 | Using C/C++ |
+
+
 # To Do
 
 

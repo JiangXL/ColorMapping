@@ -12,6 +12,7 @@ import pyqtgraph.ptime as ptime
 import homeui
 import camera
 import map
+
 #QtGui.QApplication.setGraphicsSystem('raster')
 app = QtGui.QApplication([])
 
@@ -46,17 +47,14 @@ neuron_1.addScaleHandle([0, 0], [1, 1])
 neuron_2.addScaleHandle([0, 0], [1, 1])
 bg.addScaleHandle([0,0], [1,1])
 
-
-
+# Camera Player
 ptr = 0
 lastTime = ptime.time()
 fps = None
 def update():
     global ui, ptr, lastTime, fps, img
 
-    expoTime = ui.spinBox_expo.value()/1000.000
-    camera.setExpoTime(expoTime)
-    print expoTime
+    camera.setExpoTime(ui.spinBox_expo.value()/1000.000)
 
     if  ui.radioButton_capture.isChecked():
         img.setImage(camera.seq_capt(ui.spinBox_Interval.value()/1000.00))
@@ -64,14 +62,19 @@ def update():
         img.setImage(camera.live())
     else:
         img.setImage(camera.live())
-
-    #print neuron_1.pos()
-    print neuron_1.parentBounds().getRect()
-    map.posInput(
-        bg.parentBounds().getRect(),
-        neuron_1.parentBounds().getRect(),
-        neuron_2.parentBounds().getRect()
-    )
+    # Transfer the postion and color of ROI and edge
+    if ui.checkBox_sti.isChecked():
+        ui.pushButton.clicked.connect(
+        map.updateRoi(
+            bg.parentBounds().getRect(),
+            neuron_1.parentBounds().getRect(),
+            ui.spinBox_1_red.value(), ui.spinBox_1_blue.value(),
+            neuron_2.parentBounds().getRect(),
+            ui.spinBox_2_red.value(), ui.spinBox_2_blue.value()
+            )
+        )
+    else:
+        map.setRoi(0,1024,0,768,0,0)
 
     ptr += 1
     now = ptime.time()
@@ -87,6 +90,7 @@ def update():
 timer = QtCore.QTimer()
 timer.timeout.connect(update)
 timer.start(0)
+
 
 
 

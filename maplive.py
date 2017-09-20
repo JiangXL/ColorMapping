@@ -15,18 +15,13 @@ import map
 app = QtGui.QApplication([])
 pg.setConfigOption('background','b')
 #pg.setConfigOption('useOpenGL',True)
-
-
-        #win.showFullScreen()
-
 ## Create window with GraphicsView widget
 win = pg.GraphicsLayoutWidget()
 view = win.addViewBox(enableMouse=False, lockAspect=True)
 view.disableAutoRange()
 win.setCentralWidget(view) # close the edge bettwen img and window
-win.setGeometry(10,10,1920,1200)
+win.setGeometry(10,10,1024,768)
 win.setWindowTitle('Live-iGEM 2017')
-
 
 ## Fullscreen or windos
 if sys.argv[1] == "-pre":
@@ -38,10 +33,10 @@ elif sys.argv[1] in ("-full"):
 img = pg.ImageItem(border='w')
 img.setPxMode(True)
 view.addItem(img)
-view.setLimits(xMin=0,xMax=1920,yMin=-1200,yMax=0)
+view.setLimits(xMin=0,xMax=1024,yMin=-768,yMax=0)
 # Set the initial point is (0,0)
 
-
+# Video Player
 i = 0
 updateTime = ptime.time()
 fps = 0
@@ -61,7 +56,6 @@ def updateData():
     print ("%0.1f fps" % fps)
 
 updateData()
-
 
 
 ## Start Qt event loop unless running in interactive mode.
