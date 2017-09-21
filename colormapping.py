@@ -22,7 +22,6 @@ ui.setupUi(win)
 win.setWindowTitle('Light for Life -- iGEM 2017')
 win.show()
 
-
 #ui.graphicsView.useOpenGL()
 vb = pg.ViewBox()
 ui.graphicsView.setCentralItem(vb)
@@ -33,19 +32,13 @@ vb.addItem(img)
 # Camera setting and Image Store
 
 # ROI setting
-neuron_1 = pg.RectROI([1024,1344], [100,100])
-neuron_2 = pg.RectROI([1024,1000], [100,100])
-bg = pg.RectROI([0,0], [200,200])
-vb.addItem(neuron_1)
-vb.addItem(neuron_2)
+rois = []
+for i in [0,1,2,3]:
+    y0=700+i*300
+    rois.append(pg.RectROI([1024,y0],[100,100]))
+    vb.addItem(rois[i])
+bg = pg.LineROI([0,0], [0,-2000],width=5)
 vb.addItem(bg)
-## handles scaling both vertically and horizontally
-neuron_1.addScaleHandle([1, 1], [0, 0])
-neuron_2.addScaleHandle([1, 1], [0, 0])
-bg.addScaleHandle([1,1], [0,0])
-neuron_1.addScaleHandle([0, 0], [1, 1])
-neuron_2.addScaleHandle([0, 0], [1, 1])
-bg.addScaleHandle([0,0], [1,1])
 
 # Camera Player
 ptr = 0
@@ -54,27 +47,32 @@ fps = None
 def update():
     global ui, ptr, lastTime, fps, img
 
-    camera.setExpoTime(ui.spinBox_expo.value()/1000.000)
 
+    # Transfer the orign postion and color of ROI and edge
+    if ui.pushButton_roi.isChecked():
+        wormmap = np.zeros((4,6))
+        for i in [0,1,2,3]:
+            #print np.transpose(rois[i].parentBounds().getRect())
+            wormmap[i, 0:4] = np.transpose(rois[i].parentBounds().getRect())
+        wormmap[0, 4:6]= [ui.spinBox_0_red.value(),ui.spinBox_0_blue.value()]
+        wormmap[1, 4:6]= [ui.spinBox_1_red.value(),ui.spinBox_1_blue.value()]
+        wormmap[2, 4:6]= [ui.spinBox_2_red.value(),ui.spinBox_2_blue.value()]
+        wormmap[3, 4:6]= [ui.spinBox_3_red.value(),ui.spinBox_3_blue.value()]
+
+        map.setRoi(bg.parentBounds().getRect(),wormmap)
+
+    # Update Image
+    if ui.checkBox_sti.isChecked():
+        map.updateImage()
+
+    camera.setExpoTime(ui.spinBox_expo.value()/1000.000)
     if  ui.radioButton_capture.isChecked():
         img.setImage(camera.seq_capt(ui.spinBox_Interval.value()/1000.00))
     elif ui.radioButton_pre.isChecked():
         img.setImage(camera.live())
     else:
         img.setImage(camera.live())
-    # Transfer the postion and color of ROI and edge
-    if ui.checkBox_sti.isChecked():
-        ui.pushButton.clicked.connect(
-        map.updateRoi(
-            bg.parentBounds().getRect(),
-            neuron_1.parentBounds().getRect(),
-            ui.spinBox_1_red.value(), ui.spinBox_1_blue.value(),
-            neuron_2.parentBounds().getRect(),
-            ui.spinBox_2_red.value(), ui.spinBox_2_blue.value()
-            )
-        )
-    else:
-        map.setRoi(0,1024,0,768,0,0)
+
 
     ptr += 1
     now = ptime.time()

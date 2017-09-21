@@ -8,35 +8,34 @@ Image matrix with ROI for projecting
 """
 import numpy as np
 
+# resetting image to dark
+np.save("image.npy", np.zeros((1024,768,3),dtype=np.uint8).reshape(1024, 768,3))
 
-# 1920x1200 black image fill with projector
-image = np.zeros((1024,768,3),dtype=np.uint8)
-np.save("image.npy", image.reshape(1024, 768,3))
-#Here will trouble if write and read image.npy at the same time)
-# Need to reset image.npy
+# Input background, roi postions and color and Transcale and Set
+def setRoi(bg, input):
+    # Reset image to black
+    image_pre = np.zeros((1024,768,3),dtype=np.uint8)
+    #np.save("preimage.npy", image_pre.reshape(1024, 768,3))
 
-# Input background, roi 1, roi 2 postions
-def updateRoi(bg, roi1, r1, b1, roi2, r2, b2):
-    x1 = int(roi1[0]-bg[0])
-    y1 = int(roi1[1]-bg[1])
-    x2 = int(roi2[0]-bg[0])
-    y2 = int(roi2[1]-bg[1])
-    if x1<1024 and x1>0 and x2<1024 and x2>0:
-        setRoi(x1, x1+int(roi1[2]), y1, y1+int(roi1[3]), int(r1), int(b1))
-        setRoi(x2, x2+int(roi2[2]), y2, y2+int(roi2[3]), int(r2), int(b2))
-    else:
-        print "Out of range:"
-        print x1,y1,r1,b1
-        print x2,y2,r2,b2
+    scale = 768.0/bg[3]
+    for i in [0,1,2,3]:
+        x0 = int((input[i,0]-bg[0])*scale)
+        y0 = int((input[i,1]-bg[1])*scale)
+        x1 = int(x0+(input[i,2])*scale)
+        y1 = int(y0+(input[i,3])*scale)
+        if x0>0 and x1<1024 and y0>0 and y1<1024:
+            # set image postion and color for projecter
+            image_pre[x0:x1, y0:y1,0]= int(input[i,4])
+            image_pre[x0:x1, y0:y1,2]= int(input[i,5])
+            print "Adding ROI", x0, y0, x1-x0, y1-y0, int(input[i,4]),input[i,5]
+        else:
+            print "Out of range:"
+            print x0,y0, x1-x0, y1-y0
+    image_pre=np.flipud(image_pre)
+    np.save("preimage.npy", image_pre.reshape(1024, 768,3))
 
-# set image postion and color
-def setRoi(x_start,x_end, y_start, y_end, r, b):
-    #image_add = np.zeros((1024,768,3),dtype=np.uint8)
-    image_add = getImage()
-    image_add[x_start:x_end, y_start:y_end, 0]=r
-    image_add[x_start:x_end, y_start:y_end, 2]=b
-    print "update image"
-    np.save("image.npy", image_add.reshape(1024, 768,3))
+def updateImage():
+    np.save("image.npy", np.load("preimage.npy").reshape(1024,768,3))
 
 # generate new image matrix
 def getImage():

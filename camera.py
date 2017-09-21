@@ -9,7 +9,7 @@ import time
 from Lima import Core,Andor3
 import numpy as np
 
-storepath = "/mnt/DataHub3/iGEM/"+time.strftime("%m%d", time.localtime())+"/"+time.strftime("%H",time.localtime())+"/"
+storepath = "/mnt/DataHub3/iGEM/"+time.strftime("%m%d", time.localtime())+"/"+time.strftime("%H",time.localtime())
 
 cam = Andor3.Camera("/usr/local/bf", 0) # I don't kown what about Zyla USB3.0 W
 cam_int = Andor3.Interface(cam)
@@ -49,10 +49,14 @@ def seq_capt(interval):
     time.sleep(interval)
     the_wait += interval
   print("Acquisition done with sleep of %fs"% (the_wait))
-  while cam_ctr.getStatus().AcquisitionStatus: pass
-  return np.transpose(cam_ctr.ReadImage().buffer)
-
-  time.sleep(1) # What it mean?
+  while 1:
+      try:
+          while cam_ctr.getStatus().AcquisitionStatus: pass
+          return np.transpose(cam_ctr.ReadImage().buffer)
+          break
+      except:
+          print "Camera R/W busy"
+  #time.sleep(1) # What it mean?
   try:
     record = open(storepath+"log.txt", 'w')
     record.write("Start Time:"+time.strftime("%Y-%m-%d-%H:%M",time.localtime()))
