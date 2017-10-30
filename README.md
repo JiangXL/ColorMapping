@@ -4,6 +4,19 @@ Track *C.elegans* and light single  *C.elegans* inside microscope by LCD
 projector. This project is code by PyQt5 and Python2 in anaconda, which is
 tested on Archlinux.
 
+``` bash
+  ~~~~~~~~~~~~	      ~~~~~~~~~~      ~~~~~~~~~~~~~~~~~~~~      ~~~~~~~~~~~~~~
+  |	     |	      |	       |      |  User Interface: |      |            |
+  |          |	      |        |      | 1. Show Image    |	| Project    |
+  |          |    \   |	       |   \  |	2. Select ROI    |   \	| image	     |
+  | Camera:  |-----\  | Andor  |----\ |	3. Set Parameters|----\ | into 	     |
+  |Andor Zyla|-----/  | SDK3   |----/ |	 --------------- |----/	| Microscope |
+  |   (5.2)  |	  /   |	       |   /  |	 Calculation:	 |   /	|	     |
+  |          |	      |        |      | Generate image   |	|	     |
+  ~~~~~~~~~~~~	      ~~~~~~~~~~      ~~~~~~~~~~~~~~~~~~~~	~~~~~~~~~~~~~~
+```
+
+
 
 # Prerequisite
 

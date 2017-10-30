@@ -23,6 +23,8 @@ win.setCentralWidget(view) # close the edge bettwen img and window
 win.setGeometry(10,10,1024,768)
 win.setWindowTitle('Live-iGEM 2017')
 
+win.show()# show widget alone in its own window
+
 ## Fullscreen or windos
 if sys.argv[1] == "-pre":
     win.show()# show widget alone in its own window

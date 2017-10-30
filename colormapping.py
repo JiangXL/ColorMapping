@@ -12,6 +12,7 @@ import pyqtgraph.ptime as ptime
 import homeui
 import camera
 import map
+#import maptest
 
 #QtGui.QApplication.setGraphicsSystem('raster')
 app = QtGui.QApplication([])
@@ -21,7 +22,8 @@ ui = homeui.Ui_MainWindow() # set ui
 ui.setupUi(win)
 win.setWindowTitle('Light for Life -- iGEM 2017')
 win.show()
-
+#map1=maptest()
+#win.addWindow(map1)
 #ui.graphicsView.useOpenGL()
 vb = pg.ViewBox()
 ui.graphicsView.setCentralItem(vb)
