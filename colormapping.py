@@ -10,13 +10,14 @@ import numpy as np
 import pyqtgraph as pg
 import pyqtgraph.ptime as ptime
 import homeui
-import camera
+import camera2c
 import map
 #import maptest
 
+
+## Main Widow Setting
 #QtGui.QApplication.setGraphicsSystem('raster')
 app = QtGui.QApplication([])
-
 win = QtGui.QMainWindow()
 ui = homeui.Ui_MainWindow() # set ui
 ui.setupUi(win)
@@ -31,24 +32,22 @@ vb.setAspectLocked()
 img = pg.ImageItem()
 vb.addItem(img)
 
-# Camera setting and Image Store
-
-# ROI setting
+## ROI setting
 rois = []
+# add default roi
 for i in [0,1,2,3]:
-    y0=700+i*300
-    rois.append(pg.RectROI([1024,y0],[100,100]))
+    y0=70+i*30
+    rois.append(pg.RectROI([400,y0],[20,20]))
     vb.addItem(rois[i])
-bg = pg.LineROI([0,0], [0,-2000],width=5)
+bg = pg.LineROI([0,0], [0,-200],width=5)
 vb.addItem(bg)
 
-# Camera Player
+# camera2c Player
 ptr = 0
 lastTime = ptime.time()
 fps = None
 def update():
     global ui, ptr, lastTime, fps, img
-
 
     # Transfer the orign postion and color of ROI and edge
     if ui.pushButton_roi.isChecked():
@@ -67,13 +66,13 @@ def update():
     if ui.checkBox_sti.isChecked():
         map.updateImage()
 
-    camera.setExpoTime(ui.spinBox_expo.value()/1000.000)
+    #camera2c.setExpoTime(ui.spinBox_expo.value()/1000.000)
     if  ui.radioButton_capture.isChecked():
-        img.setImage(camera.seq_capt(ui.spinBox_Interval.value()/1000.00))
+        img.setImage(camera2c.seq_capt(ui.spinBox_Interval.value()/1000.00))
     elif ui.radioButton_pre.isChecked():
-        img.setImage(camera.live())
+        img.setImage(camera2c.live())
     else:
-        img.setImage(camera.live())
+        img.setImage(camera2c.live())
 
 
     ptr += 1
@@ -87,11 +86,10 @@ def update():
         fps = fps * (1-s) + (1.0/dt) * s
     print('%0.2f fps' % fps)
     app.processEvents()  ## force complete redraw for every plot
+
 timer = QtCore.QTimer()
 timer.timeout.connect(update)
 timer.start(0)
-
-
 
 
 ## Start Qt event loop unless running in interactive mode or using pyside.
