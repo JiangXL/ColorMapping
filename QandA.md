@@ -8,7 +8,7 @@ light. C. elegans will will move based on the pattern.
 
 The projector can form a local, dynamicaly, multi-color pattern in
 slide.
-
+2
 ## How do you build the optical system?
 
 We replace the oring lens with longer force distance lens to resize
