@@ -5,187 +5,115 @@
 #include <libqhy/qhyccd.h>
 #include <time.h>
 
-#define OPENCV_SUPPORT
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/imgcodecs.hpp>
 
-#ifdef OPENCV_SUPPORT
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
-#endif
+using namespace cv;
+
 
 int main(int argc,char *argv[])
 {
     int num = 0;
     qhyccd_handle *camhandle;
     int ret;
-    char id[32];
+    char id[32]; //camera id
     char camtype[16];
     int found = 0;
     unsigned int w,h,bpp,channels;
-    unsigned char *ImgData;
-    int camtime = 10000,camgain = 0,camspeed = 2,cambinx = 1,cambiny = 1;
+    unsigned char *ImgData; //pointer
+    int camtime = 1,camgain = 0,camspeed = 2,cambinx = 1,cambiny = 1;
 
     ret = InitQHYCCDResource();
     if(ret == QHYCCD_SUCCESS)
     {
         printf("Init SDK success!\n");
     }
-    else
-    {
-        goto failure;
-    }
-    num = ScanQHYCCD();
-    if(num > 0)
-    {
-        printf("Yes!Found QHYCCD,the num is %d \n",num);
-    }
-    else
-    {
-        printf("Not Found QHYCCD,please check the usblink or the power\n");
-        goto failure;
-    }
 
-    for(int i = 0;i < num;i++)
-    {
-        ret = GetQHYCCDId(i,id);
-        if(ret == QHYCCD_SUCCESS)
-        {
-            printf("connected to the first camera from the list,id is %s\n",id);
-            found = 1;
-            break;
-        }
-    }
+    ScanQHYCCD();
+    GetQHYCCDId(0,id);
 
-    if(found == 1)
-    {
-        camhandle = OpenQHYCCD(id);
-        if(camhandle != NULL)
-        {
-            printf("Open QHYCCD success!\n");
-        }
-        else
-        {
-            printf("Open QHYCCD failed \n");
-            goto failure;
-        }
-        ret = SetQHYCCDStreamMode(camhandle,1);
+    camhandle = OpenQHYCCD(id);
+      if(camhandle == NULL)
+      {
+          printf("Open QHYCCD failed \n");
+          return -1;
+      }
 
-
-        ret = InitQHYCCD(camhandle);
-        if(ret == QHYCCD_SUCCESS)
-        {
-            printf("Init QHYCCD success!\n");
-        }
-        else
+    SetQHYCCDStreamMode(camhandle,1); // Live Mode
+    ret = InitQHYCCD(camhandle);
+        if(ret != QHYCCD_SUCCESS)
         {
             printf("Init QHYCCD fail code:%d\n",ret);
-            goto failure;
+            return -1;
         }
 
-        double chipw,chiph,pixelw,pixelh;
-        ret = GetQHYCCDChipInfo(camhandle,&chipw,&chiph,&w,&h,&pixelw,&pixelh,&bpp);
-        if(ret == QHYCCD_SUCCESS)
-        {
-            printf("GetQHYCCDChipInfo success!\n");
-            printf("CCD/CMOS chip information:\n");
+    double chipw,chiph,pixelw,pixelh;
+    ret = GetQHYCCDChipInfo(camhandle,&chipw,&chiph,&w,&h,&pixelw,&pixelh,&bpp);
+    if(ret == QHYCCD_SUCCESS)
+    {
             printf("Chip width %3f mm,Chip height %3f mm\n",chipw,chiph);
             printf("Chip pixel width %3f um,Chip pixel height %3f um\n",pixelw,pixelh);
             printf("Chip Max Resolution is %d x %d,depth is %d\n",w,h,bpp);
-        }
-        else
-        {
-            printf("GetQHYCCDChipInfo fail\n");
-            goto failure;
-        }
-
-       ret = IsQHYCCDControlAvailable(camhandle,CONTROL_TRANSFERBIT);
-        if(ret == QHYCCD_SUCCESS)
-        {
-            ret = SetQHYCCDBitsMode(camhandle,8);
-            if(ret != QHYCCD_SUCCESS)
-            {
-                printf("SetQHYCCDParam CONTROL_GAIN failed\n");
-                getchar();
-                return 1;
-            }
-        }
-
-        ret = SetQHYCCDResolution(camhandle,0,0,w,h);
-        if(ret == QHYCCD_SUCCESS)
-        {
-            printf("SetQHYCCDResolution success!\n");
-        }
-        else
-        {
-            printf("SetQHYCCDResolution fail\n");
-            goto failure;
-        }
-
-        ret = BeginQHYCCDLive(camhandle);
-        if(ret == QHYCCD_SUCCESS)
-        {
-            printf("BeginQHYCCDLive success!\n");
-        }
-        else
-        {
-            printf("BeginQHYCCDLive failed\n");
-            goto failure;
-        }
-
-        int length = GetQHYCCDMemLength(camhandle);
-
-        if(length > 0)
-        {
-            ImgData = (unsigned char *)malloc(length);
-            memset(ImgData,0,length);
-        }
-        else
-        {
-            printf("Get the min memory space length failure \n");
-            goto failure;
-        }
-
-
-        int t_start,t_end;
-        t_start = time(NULL);
-        int fps = 0;
-        #ifdef OPENCV_SUPPORT
-        IplImage *img = NULL;
-        cvNamedWindow("show",0);
-        #endif
-
-        ret = QHYCCD_ERROR;
-        while(ret != QHYCCD_SUCCESS)
-        {
-            ret = GetQHYCCDLiveFrame(camhandle,&w,&h,&bpp,&channels,ImgData);
-            if(ret == QHYCCD_SUCCESS)
-            {
-                #ifdef OPENCV_SUPPORT
-                if(img == NULL)
-                {
-                    img = cvCreateImageHeader(cvSize(w,h),bpp,1);
-                    img->imageData = (char *)ImgData;
-                }
-                cvShowImage("show",img);
-                cvWaitKey(30);
-                #endif
-                fps++;
-                t_end = time(NULL);
-                if(t_end - t_start >= 5)
-                {
-                    printf("fps = %d\n",fps / 5);
-                    fps = 0;
-                    t_start = time(NULL);
-                }
-            }
-
-        }
-        delete(ImgData);
     }
-    else
-    {
-        printf("The camera is not QHYCCD or other error \n");
-        goto failure;
-    }
+
+    ret = SetQHYCCDResolution(camhandle,0,0,w,h);
+      if(ret != QHYCCD_SUCCESS)
+      {
+          printf("SetQHYCCDResolution fail\n");
+          return -1;
+      }
+
+      ret = BeginQHYCCDLive(camhandle);
+      if(ret != QHYCCD_SUCCESS)
+      {
+          printf("BeginQHYCCDLive failed\n");
+          //goto failure;
+          return -1;
+      }
+
+      int length = GetQHYCCDMemLength(camhandle);
+
+      if(length > 0)
+      {
+          ImgData = (unsigned char *)malloc(length);
+          memset(ImgData,0,length);
+      }
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+      int t_start,t_end;
+      t_start = time(NULL);
+      int fps = 0;
+      Mat img=Mat(w,h,CV_8UC1);
+      namedWindow("Live", w);
+
+      ret = QHYCCD_ERROR;
+//      while(ret != QHYCCD_SUCCESS)
+      while(1)
+      {
+          ret = GetQHYCCDLiveFrame(camhandle,&w,&h,&bpp,&channels,ImgData);
+          if(ret == QHYCCD_SUCCESS)
+          {
+              //img=Mat(w,h,CV_8UC1, ImgData);
+              img.data=ImgData;
+              imshow("Live", img);
+              waitKey(10);
+
+              fps++;
+              t_end = time(NULL);
+              if(t_end - t_start >= 5)
+              {
+                  printf("fps = %d\n",fps / 5);
+                  fps = 0;
+                  t_start = time(NULL);
+              }
+            }
+      }
+      delete(ImgData);
+
 
     if(camhandle)
     {
@@ -198,7 +126,7 @@ int main(int argc,char *argv[])
         }
         else
         {
-            goto failure;
+            return -1;
         }
     }
 
@@ -209,12 +137,9 @@ int main(int argc,char *argv[])
     }
     else
     {
-        goto failure;
+      return -1;
     }
 
     return 0;
 
-failure:
-    printf("some fatal error happened\n");
-    return 1;
 }

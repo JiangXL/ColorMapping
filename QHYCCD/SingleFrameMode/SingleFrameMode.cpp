@@ -65,10 +65,8 @@ int main(int argc, char *argv[]) {
     // scan cameras
     int camCount = ScanQHYCCD();
 
-    // iterate over all attached cameras
-    bool camFound = false;
+    // get ID of attached cameras
     char camId[32];
-
     retVal = GetQHYCCDId(0, camId); //0 mean the first camera
 
     // open camera

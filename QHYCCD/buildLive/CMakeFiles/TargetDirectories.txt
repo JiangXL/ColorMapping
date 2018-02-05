@@ -1,0 +1,3 @@
+/home/igem/Documents/ColorMapping/QHYCCD/buildLive/CMakeFiles/rebuild_cache.dir
+/home/igem/Documents/ColorMapping/QHYCCD/buildLive/CMakeFiles/./LiveFrameSampletest.dir
+/home/igem/Documents/ColorMapping/QHYCCD/buildLive/CMakeFiles/edit_cache.dir
