@@ -11,6 +11,7 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/home/igem/Documents/ColorMapping/QHYCCD/SingleFrameMode/$(USB_1_INCLUDE_DIR)"
+  "/usr/include/opencv"
   "/usr/local/include/libusb-1.0"
   )
 

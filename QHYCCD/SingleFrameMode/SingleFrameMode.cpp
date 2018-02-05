@@ -4,6 +4,14 @@
 #include <unistd.h>
 #include <string.h>
 #include "../include/qhyccd.h"
+#include <opencv2/core.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/opencv.hpp>
+#include <iostream>
+
+using namespace cv;
+using namespace std;
 
 #define VERSION 1.10
 
@@ -12,7 +20,7 @@ int main(int argc, char *argv[]) {
     int USB_TRAFFIC = 10;
     int CHIP_GAIN = 10;
     int CHIP_OFFSET = 140;
-    int EXPOSURE_TIME = 20000;
+    int EXPOSURE_TIME = 2000;
     int camBinX = 1;
     int camBinY = 1;
 
@@ -41,7 +49,7 @@ int main(int argc, char *argv[]) {
     unsigned int bpp;
     unsigned int channels;
 
-    unsigned char *pImgData = 0;
+    unsigned char *pImgData = 0; //pImgDta 是指向 unsigned char 类型的指针
 
     const char *pFirmware = "/usr/local/lib/qhy";
 
@@ -118,15 +126,20 @@ int main(int argc, char *argv[]) {
         pImgData = new unsigned char[length];
         memset(pImgData, 0, length);
         printf("Allocated memory for frame: %d [uchar].\n", length);
-    } else {
-        printf("Cannot allocate memory for frame.\n");
-        return 1;
     }
 
     // get single frame
     retVal = GetQHYCCDSingleFrame(pCamHandle, &roiSizeX, &roiSizeY, &bpp, &channels, pImgData);
     if (QHYCCD_SUCCESS == retVal) {
         printf("GetQHYCCDSingleFrame: %d x %d, bpp: %d, channels: %d, success.\n", roiSizeX, roiSizeY, bpp, channels);
+
+        // Transfer data to Mat object
+        Mat image = Mat(roiSizeX,roiSizeY,CV_16UC1, pImgData);
+
+        namedWindow("DisplayWindow", WINDOW_AUTOSIZE);
+        imshow("DisplayWindow", image);
+        waitKey(0);
+        imwrite("test.tiff",image); // save the tiff
         //process image here
     }
 
@@ -134,7 +147,7 @@ int main(int argc, char *argv[]) {
 
     retVal = CancelQHYCCDExposingAndReadout(pCamHandle);
     if (QHYCCD_SUCCESS == retVal) {
-        printf("CancelQHYCCDExposingAndReadout success.\n");
+        printf("CancelQHYCCDExposing And Readout success.\n");
     }
 
     // close camera handle

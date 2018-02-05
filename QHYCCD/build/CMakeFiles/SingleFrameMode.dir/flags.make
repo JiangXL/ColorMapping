@@ -6,5 +6,5 @@ CXX_FLAGS =
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I"/home/igem/Documents/ColorMapping/QHYCCD/SingleFrameMode/\$$(USB_1_INCLUDE_DIR)" -I/usr/local/include/libusb-1.0 
+CXX_INCLUDES = -I"/home/igem/Documents/ColorMapping/QHYCCD/SingleFrameMode/\$$(USB_1_INCLUDE_DIR)" -isystem /usr/include/opencv -I/usr/local/include/libusb-1.0 
 

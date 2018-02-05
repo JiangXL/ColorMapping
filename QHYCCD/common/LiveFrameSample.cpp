@@ -5,7 +5,7 @@
 #include <libqhy/qhyccd.h>
 #include <sys/time.h>
 
-//#define OPENCV_SUPPORT
+#define OPENCV_SUPPORT
 
 #ifdef OPENCV_SUPPORT
 #include <opencv/cv.h>
@@ -68,7 +68,7 @@ int main(int argc,char *argv[])
             goto failure;
         }
         ret = SetQHYCCDStreamMode(camhandle,1);
-    
+
 
         ret = InitQHYCCD(camhandle);
         if(ret == QHYCCD_SUCCESS)
@@ -80,7 +80,7 @@ int main(int argc,char *argv[])
             printf("Init QHYCCD fail code:%d\n",ret);
             goto failure;
         }
-        
+
         double chipw,chiph,pixelw,pixelh;
         ret = GetQHYCCDChipInfo(camhandle,&chipw,&chiph,&w,&h,&pixelw,&pixelh,&bpp);
         if(ret == QHYCCD_SUCCESS)
@@ -96,7 +96,7 @@ int main(int argc,char *argv[])
             printf("GetQHYCCDChipInfo fail\n");
             goto failure;
         }
-        
+
        ret = IsQHYCCDControlAvailable(camhandle,CONTROL_TRANSFERBIT);
         if(ret == QHYCCD_SUCCESS)
         {
@@ -107,7 +107,7 @@ int main(int argc,char *argv[])
                 getchar();
                 return 1;
             }
-        }        
+        }
 
         ret = SetQHYCCDResolution(camhandle,0,0,w,h);
         if(ret == QHYCCD_SUCCESS)
@@ -132,7 +132,7 @@ int main(int argc,char *argv[])
         }
 
         int length = GetQHYCCDMemLength(camhandle);
-        
+
         if(length > 0)
         {
             ImgData = (unsigned char *)malloc(length);
@@ -143,7 +143,7 @@ int main(int argc,char *argv[])
             printf("Get the min memory space length failure \n");
             goto failure;
         }
-    
+
 
         int t_start,t_end;
         t_start = time(NULL);
@@ -179,14 +179,14 @@ int main(int argc,char *argv[])
             }
 
         }
-        delete(ImgData);  
+        delete(ImgData);
     }
     else
     {
         printf("The camera is not QHYCCD or other error \n");
         goto failure;
     }
-    
+
     if(camhandle)
     {
         StopQHYCCDLive(camhandle);
