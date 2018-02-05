@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "start appserver4phone!"
+./appserver4phone

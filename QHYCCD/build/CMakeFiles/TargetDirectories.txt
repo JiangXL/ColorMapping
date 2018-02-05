@@ -1,0 +1,3 @@
+/home/igem/Documents/ColorMapping/QHYCCD/build/CMakeFiles/rebuild_cache.dir
+/home/igem/Documents/ColorMapping/QHYCCD/build/CMakeFiles/SingleFrameMode.dir
+/home/igem/Documents/ColorMapping/QHYCCD/build/CMakeFiles/edit_cache.dir
