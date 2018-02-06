@@ -64,10 +64,10 @@ int main(int argc, char *argv[]) {
 
     // scan cameras
     int camCount = ScanQHYCCD();
-
     // get ID of attached cameras
     char camId[32];
     retVal = GetQHYCCDId(0, camId); //0 mean the first camera
+    printf("%s\n", camId);
 
     // open camera
     qhyccd_handle *pCamHandle = OpenQHYCCD(camId);
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
     // set single frame mode
     int mode = 0;
     retVal = SetQHYCCDStreamMode(pCamHandle, mode);
-    printf("SetQHYCCDStreamMode set to: Single Frame\n");
+    printf("SetQHYCCDStreamMode: Single Frame\n");
 
     // initialize camera
     retVal = InitQHYCCD(pCamHandle);
@@ -127,19 +127,25 @@ int main(int argc, char *argv[]) {
     }
 
     // get single frame
+    Mat image = Mat(roiSizeX,roiSizeY,CV_16UC1);
+    int i =0;
+    while(1){
     retVal = GetQHYCCDSingleFrame(pCamHandle, &roiSizeX, &roiSizeY, &bpp, &channels, pImgData);
     if (QHYCCD_SUCCESS == retVal) {
         printf("GetQHYCCDSingleFrame: %d x %d, bpp: %d, channels: %d, success.\n", roiSizeX, roiSizeY, bpp, channels);
 
         // Transfer data to Mat object
-        Mat image = Mat(roiSizeX,roiSizeY,CV_16UC1, pImgData);
-
-        namedWindow("DisplayWindow", WINDOW_AUTOSIZE);
-        imshow("DisplayWindow", image);
-        waitKey(0);
+        //Mat image = Mat(roiSizeX,roiSizeY,CV_16UC1, pImgData);
+        image.data=pImgData;
+        //namedWindow("DisplayWindow", WINDOW_AUTOSIZE);
+        //imshow("DisplayWindow", image);
+        waitKey(1);
         imwrite("test.tiff",image); // save the tiff
+        i++;
+        printf("%d\n", i);
         //process image here
     }
+  }
 
     delete [] pImgData;
 

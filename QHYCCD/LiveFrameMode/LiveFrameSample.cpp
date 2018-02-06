@@ -92,7 +92,7 @@ int main(int argc,char *argv[])
 
       ret = QHYCCD_ERROR;
 //      while(ret != QHYCCD_SUCCESS)
-      while(1)
+      while(true)
       {
           ret = GetQHYCCDLiveFrame(camhandle,&w,&h,&bpp,&channels,ImgData);
           if(ret == QHYCCD_SUCCESS)
@@ -100,7 +100,9 @@ int main(int argc,char *argv[])
               //img=Mat(w,h,CV_8UC1, ImgData);
               img.data=ImgData;
               imshow("Live", img);
-              waitKey(10);
+              if(waitKey(10)==27){
+                break;
+              }
 
               fps++;
               t_end = time(NULL);
