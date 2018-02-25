@@ -41,6 +41,7 @@ int main(int argc,char *argv[])
           return -1;
       }
 
+    //SetQHYCCDBinMode(camhandle, 1, 1);
     SetQHYCCDStreamMode(camhandle,1); // Live Mode
     ret = InitQHYCCD(camhandle);
         if(ret != QHYCCD_SUCCESS)
@@ -58,6 +59,8 @@ int main(int argc,char *argv[])
             printf("Chip Max Resolution is %d x %d,depth is %d\n",w,h,bpp);
     }
 
+    SetQHYCCDParam(camhandle,CONTROL_USBTRAFFIC,6);
+
     ret = SetQHYCCDResolution(camhandle,0,0,w,h);
       if(ret != QHYCCD_SUCCESS)
       {
@@ -66,6 +69,8 @@ int main(int argc,char *argv[])
       }
 
       ret = BeginQHYCCDLive(camhandle);
+      //ret = ExpQHYCCDSingleFrame(camhandle);
+
       if(ret != QHYCCD_SUCCESS)
       {
           printf("BeginQHYCCDLive failed\n");
@@ -86,7 +91,7 @@ int main(int argc,char *argv[])
 
       int t_start,t_end;
       t_start = time(NULL);
-      int fps = 0;
+      double fps = 0;
       Mat img=Mat(w,h,CV_8UC1);
       namedWindow("Live", w);
 
@@ -95,6 +100,8 @@ int main(int argc,char *argv[])
       while(true)
       {
           ret = GetQHYCCDLiveFrame(camhandle,&w,&h,&bpp,&channels,ImgData);
+          //ret = GetQHYCCDSingleFrame(camhandle, &w, &h, &bpp, &channels, ImgData);
+
           if(ret == QHYCCD_SUCCESS)
           {
               //img=Mat(w,h,CV_8UC1, ImgData);
@@ -103,12 +110,12 @@ int main(int argc,char *argv[])
               if(waitKey(10)==27){
                 break;
               }
-
+              
               fps++;
               t_end = time(NULL);
               if(t_end - t_start >= 5)
               {
-                  printf("fps = %d\n",fps / 5);
+                  printf("fps = %g\n",fps / 5);
                   fps = 0;
                   t_start = time(NULL);
               }
