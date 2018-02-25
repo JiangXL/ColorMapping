@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -58,25 +57,17 @@ int main(int argc, char *argv[]) {
     // First of all, we have to call the InitQHYCCDResource function, which also
     // initializes the low level libusb library.
     int retVal = InitQHYCCDResource();
-    if (QHYCCD_SUCCESS == retVal) {
-        printf("SDK resources initialized.\n");
-    }
-
-    // scan cameras
-    int camCount = ScanQHYCCD();
-    // get ID of attached cameras
-    char camId[32];
-    retVal = GetQHYCCDId(0, camId); //0 mean the first camera
+    int camCount = ScanQHYCCD();// scan cameras
+    char camId[32];// get ID of attached cameras
+    GetQHYCCDId(0, camId); //0 mean the first camera
     printf("%s\n", camId);
-
     // open camera
     qhyccd_handle *pCamHandle = OpenQHYCCD(camId);
-
     // set single frame mode
     int mode = 0;
     retVal = SetQHYCCDStreamMode(pCamHandle, mode);
     printf("SetQHYCCDStreamMode: Single Frame\n");
-
+    
     // initialize camera
     retVal = InitQHYCCD(pCamHandle);
     if (QHYCCD_SUCCESS == retVal) {

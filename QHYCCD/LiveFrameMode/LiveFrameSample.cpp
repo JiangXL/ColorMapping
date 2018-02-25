@@ -4,7 +4,6 @@
 #include <string.h>
 #include <libqhy/qhyccd.h>
 #include <time.h>
-
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/core.hpp>
@@ -19,68 +18,35 @@ int main(int argc,char *argv[])
     qhyccd_handle *camhandle;
     int ret;
     char id[32]; //camera id
-    char camtype[16];
     int found = 0;
     unsigned int w,h,bpp,channels;
     unsigned char *ImgData; //pointer
-    int camtime = 1,camgain = 0,camspeed = 2,cambinx = 1,cambiny = 1;
+    int frames = 1000,camgain = 0,camspeed = 0,cambinx = 1,cambiny = 1;
 
-    ret = InitQHYCCDResource();
-    if(ret == QHYCCD_SUCCESS)
-    {
-        printf("Init SDK success!\n");
-    }
-
+////////////////////////////////////////////////////////////////////////////
+    InitQHYCCDResource();
     ScanQHYCCD();
     GetQHYCCDId(0,id);
-
     camhandle = OpenQHYCCD(id);
-      if(camhandle == NULL)
-      {
-          printf("Open QHYCCD failed \n");
-          return -1;
-      }
-
-    //SetQHYCCDBinMode(camhandle, 1, 1);
-    SetQHYCCDStreamMode(camhandle,1); // Live Mode
-    ret = InitQHYCCD(camhandle);
-        if(ret != QHYCCD_SUCCESS)
-        {
-            printf("Init QHYCCD fail code:%d\n",ret);
-            return -1;
-        }
+    SetQHYCCDStreamMode(camhandle, 1); //1-Live Mode, 0-SingleFrame
+    InitQHYCCD(camhandle);
 
     double chipw,chiph,pixelw,pixelh;
-    ret = GetQHYCCDChipInfo(camhandle,&chipw,&chiph,&w,&h,&pixelw,&pixelh,&bpp);
-    if(ret == QHYCCD_SUCCESS)
-    {
-            printf("Chip width %3f mm,Chip height %3f mm\n",chipw,chiph);
-            printf("Chip pixel width %3f um,Chip pixel height %3f um\n",pixelw,pixelh);
-            printf("Chip Max Resolution is %d x %d,depth is %d\n",w,h,bpp);
-    }
-
+    GetQHYCCDChipInfo(camhandle,&chipw,&chiph,&w,&h,&pixelw,&pixelh,&bpp);
+    printf("dep%d\n",bpp );
+    //SetQHYCCDBinMode(camhandle, cambinx, cambiny);
+    //SetQHYCCDParam(camhandle, DDR_BUFFER_CAPACITY, 128);
     SetQHYCCDParam(camhandle,CONTROL_USBTRAFFIC,6);
+    SetQHYCCDParam(camhandle,CONTROL_EXPOSURE,1000);
+    /*w=1280;
+    h=960;*/
+    SetQHYCCDResolution(camhandle,0,0,w,h);
+    printf("w%d h%d\n",w,h );
+    BeginQHYCCDLive(camhandle);
+    //ExpQHYCCDSingleFrame(camhandle);
 
-    ret = SetQHYCCDResolution(camhandle,0,0,w,h);
-      if(ret != QHYCCD_SUCCESS)
-      {
-          printf("SetQHYCCDResolution fail\n");
-          return -1;
-      }
-
-      ret = BeginQHYCCDLive(camhandle);
-      //ret = ExpQHYCCDSingleFrame(camhandle);
-
-      if(ret != QHYCCD_SUCCESS)
-      {
-          printf("BeginQHYCCDLive failed\n");
-          //goto failure;
-          return -1;
-      }
-
-      int length = GetQHYCCDMemLength(camhandle);
-
-      if(length > 0)
+    int length = GetQHYCCDMemLength(camhandle);
+    if(length > 0)
       {
           ImgData = (unsigned char *)malloc(length);
           memset(ImgData,0,length);
@@ -92,26 +58,31 @@ int main(int argc,char *argv[])
       int t_start,t_end;
       t_start = time(NULL);
       double fps = 0;
-      Mat img=Mat(w,h,CV_8UC1);
+      Mat img=Mat(h,w,CV_8UC1);// The imge of liveframe is 8 bit.
+      //if it is set wrong, opencv can not show normally.
+      // live- 3fps-8bit
+      // single - 0.4-16bit
+      char filename[100];
+      int name =0;
       namedWindow("Live", w);
 
-      ret = QHYCCD_ERROR;
-//      while(ret != QHYCCD_SUCCESS)
-      while(true)
+      while(frames > 0)
       {
           ret = GetQHYCCDLiveFrame(camhandle,&w,&h,&bpp,&channels,ImgData);
-          //ret = GetQHYCCDSingleFrame(camhandle, &w, &h, &bpp, &channels, ImgData);
-
+          //ExpQHYCCDSingleFrame(camhandle);
+          //ret=GetQHYCCDSingleFrame(camhandle, &w, &h, &bpp, &channels, ImgData);
           if(ret == QHYCCD_SUCCESS)
           {
-              //img=Mat(w,h,CV_8UC1, ImgData);
               img.data=ImgData;
-              imshow("Live", img);
-              if(waitKey(10)==27){
+              sprintf(filename,"%d.tiff",name);
+              imwrite(filename,img); // save the tiff
+
+              imshow("Live", img); // show
+              if(waitKey(3)==27){
                 break;
               }
-              
-              fps++;
+
+              fps++;              // calculate fps
               t_end = time(NULL);
               if(t_end - t_start >= 5)
               {
@@ -119,36 +90,24 @@ int main(int argc,char *argv[])
                   fps = 0;
                   t_start = time(NULL);
               }
+              frames --;
             }
       }
       delete(ImgData);
 
-
+////////////////////////////////////////////////////////////////////////////////
     if(camhandle)
     {
         StopQHYCCDLive(camhandle);
-
-        ret = CloseQHYCCD(camhandle);
-        if(ret == QHYCCD_SUCCESS)
-        {
-            printf("Close QHYCCD success!\n");
-        }
-        else
-        {
-            return -1;
-        }
+        CloseQHYCCD(camhandle);
     }
-
     ret = ReleaseQHYCCDResource();
-    if(ret == QHYCCD_SUCCESS)
-    {
-        printf("Rlease SDK Resource  success!\n");
+    if (QHYCCD_SUCCESS == ret) {
+        printf("SDK resources released.\n");
+    } else {
+        printf("Cannot release SDK resources, error %d.\n", ret);
+        return 1;
     }
-    else
-    {
-      return -1;
-    }
-
     return 0;
 
 }
