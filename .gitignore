@@ -1,3 +1,8 @@
 /bin/
 *.pyc
 *.npy
+
+QHYCCD/build/*
+QHYCCD/buildLive/*
+QHYCCD/Play/*
+

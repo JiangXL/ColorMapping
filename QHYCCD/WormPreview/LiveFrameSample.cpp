@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <libqhy/qhyccd.h>
+#include "include/qhyccd.h"
 #include <time.h>
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
@@ -21,7 +21,7 @@ int main(int argc,char *argv[])
     int found = 0;
     unsigned int w,h,bpp,channels;
     unsigned char *ImgData; //pointer
-    int frames = 10000,camgain = 0,camspeed = 0,cambinx = 1,cambiny = 1;
+    int frames = 10000,camgain = 0,camspeed = 0,cambinx = 2,cambiny = 2;
 
 ////////////////////////////////////////////////////////////////////////////
     InitQHYCCDResource();
@@ -34,7 +34,7 @@ int main(int argc,char *argv[])
     double chipw,chiph,pixelw,pixelh;
     GetQHYCCDChipInfo(camhandle,&chipw,&chiph,&w,&h,&pixelw,&pixelh,&bpp);
     printf("dep%d\n",bpp );
-    //SetQHYCCDBinMode(camhandle, cambinx, cambiny); // What it mean?
+    //SetQHYCCDBinMode(camhandle, cambinx, cambiny);
     //SetQHYCCDParam(camhandle, DDR_BUFFER_CAPACITY, 128);
     SetQHYCCDParam(camhandle,CONTROL_USBTRAFFIC,0);
     //SetQHYCCDParam(camhandle,CONTROL_EXPOSURE,5000);
@@ -68,7 +68,8 @@ int main(int argc,char *argv[])
       int name =0;
       namedWindow("Live", w);
 
-      while(frames > 0)
+      //while(frames > 0)
+      while(1)
       {
           ret = GetQHYCCDLiveFrame(camhandle,&w,&h,&bpp,&channels,ImgData);
           //ExpQHYCCDSingleFrame(camhandle);
