@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <libqhy/qhyccd.h>
+#include "include/qhyccd.h"
 #include <time.h>
 
 #include "camera.h"
@@ -66,13 +66,13 @@ int camlive(void){
 
 unsigned char *getcamlivedate(){
     ret = GetQHYCCDLiveFrame(camhandle,&w,&h,&bpp,&channels,ImgData);
-          //ExpQHYCCDSingleFrame(camhandle);
-          //SetQHYCCDParam(camhandle,CONTROL_EXPOSURE,5000);
-         //ret=GetQHYCCDSingleFrame(camhandle, &w, &h, &bpp, &channels, ImgData);
     return ImgData;
 }
 
 int timeseries(int a[]){
+  //ExpQHYCCDSingleFrame(camhandle);
+  //SetQHYCCDParam(camhandle,CONTROL_EXPOSURE,5000);
+ //ret=GetQHYCCDSingleFrame(camhandle, &w, &h, &bpp, &channels, ImgData);
   return 1;
 }
 
