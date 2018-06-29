@@ -23,13 +23,18 @@ Mat img=Mat(height,width,CV_8UC1);// The imge of liveframe is 8 bit.
 
 //update raw img and save to opencv img
 void acceptrawimg(void){
+      char exposetime = cam_info();
       img.data = getcamlivedate(); // accept the image date
+      //printf("%c\n",exposetime);
+      //printf("try to get data\n");
+      // need add error handle
 }
 
 //void save2tiff(char name[100){
 void save2tiff(char name[100]) {
       Mat imgbuf = img.clone(); // copy to new memory to avoid image cover
-      imwrite(name, imgbuf);
+      //imwrite(name, imgbuf);
+      //printf("save2tiff%s\n", name);
       return;
 }
 
@@ -53,9 +58,9 @@ int viewer(void){
       {
               sprintf(filename,"live/%d.tiff",name);
               capture(filename);
-              imshow("QHYCCD Viewer", img); // show
+              imshow("QHYCCD Viewer", img); // close imshow up fps to 35
               if(waitKey(3)==27){  // put down esc  to break
-                break;
+                break; // why i commit it then no windos
               }
 
               fps++;              // calculate fps

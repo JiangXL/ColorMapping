@@ -24,7 +24,9 @@ int caminit(void)
     InitQHYCCDResource();
     ScanQHYCCD();
     GetQHYCCDId(0,id);
+    //GetQHYCCDModel(id,model);
     camhandle = OpenQHYCCD(id);
+    printf("%c\n", *model);
 
     GetQHYCCDChipInfo(camhandle,&chipw,&chiph,&w,&h,&pixelw,&pixelh,&bpp);
     printf("dep%d\n",bpp );
@@ -40,6 +42,7 @@ void setexposure(int time){
 }
 
 int camlive(void){
+    printf("Opening cammera hardware live mode\n");
     SetQHYCCDStreamMode(camhandle, 1); //1-Live Mode, 0-SingleFrame
     InitQHYCCD(camhandle);
 
@@ -66,6 +69,9 @@ int camlive(void){
 
 unsigned char *getcamlivedate(){
     ret = GetQHYCCDLiveFrame(camhandle,&w,&h,&bpp,&channels,ImgData);
+    //if(ret == QHYCCD_SUCCESS)
+    //while()
+    //printf("getcamlivedate%i\n", ret);
     return ImgData;
 }
 
@@ -80,7 +86,7 @@ void camlivestop(void){
   if(camhandle)
   {
       ret = StopQHYCCDLive(camhandle);
-      delete(ImgData);
+      //delete(ImgData);
       if (QHYCCD_SUCCESS != ret) {
           printf("SDK resources released failed.\n");
         }
@@ -98,4 +104,13 @@ void camclose(void){
     } else {
         printf("Cannot release SDK resources, error %d.\n", ret);
     }
+}
+
+//collect camera info
+char cam_info(){
+    //printf("cam_info\n");
+    //return   GetQHYCCDParam(camhandle, CONTROL_EXPOSURE);
+    char *status="null";
+    //GetQHYCCDModel(id,status);
+    return *status;
 }

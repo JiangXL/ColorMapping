@@ -11,11 +11,12 @@ using namespace std;
 
 int main(int argc,char *argv[]){
   caminit();
-// camlive();
+  camlive();
 
-  // Viewer windows detach thread
+  //Viewer windows detach thread
   std::thread viewerwindow(viewer);
   viewerwindow.detach();
+  camlivestop();
 
   // keyboard command dection detach thread
   std::thread actiondector(actiondect);
@@ -23,8 +24,9 @@ int main(int argc,char *argv[]){
 
   // block fucntion to grab, present and save image
   camworking();
-
   // relative computer and cammera resources
+
+  //viewer();
   camlivestop();
   camclose();
 }

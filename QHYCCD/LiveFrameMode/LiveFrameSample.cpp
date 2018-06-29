@@ -46,6 +46,7 @@ int main(int argc,char *argv[])
     //BeginLiveExposure(400);
     BeginQHYCCDLive(camhandle);
     //ExpQHYCCDSingleFrame(camhandle);
+    //CloseQHYCCD(camhandle);
 
     int length = GetQHYCCDMemLength(camhandle);
     if(length > 0)
@@ -95,7 +96,9 @@ int main(int argc,char *argv[])
               }
               frames --;
               name++;
-	}
+	         }else{
+             printf("get LiveFrame fail\n");
+           }
       }
       delete(ImgData);
 

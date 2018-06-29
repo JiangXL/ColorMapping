@@ -1,8 +1,8 @@
-enum model {
-  camera_stop = 0,
-  camera_live = 1,
-  camera_capture = 2
-};
+
+
+#define  key_l  108
+#define  key_c  99
+#define  key_esc  27
 
 void camworking();
 void actiondect();
