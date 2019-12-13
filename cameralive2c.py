@@ -44,10 +44,10 @@ def updateData():
 
     #data = np.transpose(camera.live())
     data = camera2c.live()
-    print data.shape
+    print( data.shape)
     data= cv2.transpose(data)
     #data=np.transpose(data)
-    print data.shape
+    print (data.shape)
     img.setImage(data)
     QtCore.QTimer.singleShot(1, updateData)
     now = ptime.time()

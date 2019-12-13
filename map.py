@@ -25,10 +25,10 @@ def setRoi(bg, input):
             # set image postion and color for projecter
             image_pre[x0:x1, y0:y1,0]= int(input[i,4])
             image_pre[x0:x1, y0:y1,2]= int(input[i,5])
-            print "Adding ROI", x0, y0, x1-x0, y1-y0, int(input[i,4]),input[i,5]
+            print("Adding ROI", x0, y0, x1-x0, y1-y0, int(input[i,4]),input[i,5])
         else:
-            print "Out of range:"
-            print x0,y0, x1-x0, y1-y0
+            print( "Out of range:")
+            print( x0,y0, x1-x0, y1-y0)
     image_pre=np.flipud(image_pre)
     np.save("preimage.npy", image_pre.reshape(1280, 720,3))
 
@@ -43,4 +43,4 @@ def getImage():
             return getimage
             break
         except :
-            print "IO Busy"
+            print( "IO Busy")

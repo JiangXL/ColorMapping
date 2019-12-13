@@ -11,7 +11,8 @@ import numpy as np
 storepath = time.strftime("%m%d", time.localtime())+"/"+time.strftime("%H",time.localtime())
 
 ## select VideoCapture device
-cap = cv2.VideoCapture(0)
+#cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture("/dev/video0")
 cap.set(3,800)
 cap.set(4,600)
 def live():

@@ -21,18 +21,43 @@ tested on Archlinux.
 # Prerequisite
 
 
-1. Install Andor SDK3 in  ArchLinux
+1. Install Andor SDK3 in  ArchLinux or Deepin
 
 ``` bash
-# prepare tool for kenel compile
-sudo pacman -S linux-headers
-sudo pacman -S numactl
 # Andor sdk3 only run below linux kernel 4, so I install linux kernel 3.16
+# Prepare tool for kenel compile from AUR in ArchLinux
+sudo pacman -S linux-headers numactl
 yaourt linux-lts316
-#Enter the andor directory and run
+# Mannual download kernel tar and compile with standard procedure
+wget https://cdn.kernel.org/pub/linux/kernel/v3.x/linux-3.16.79.tar.xz
+unxz -v linux-3.16.79.tar.xz
+wget https://cdn.kernel.org/pub/linux/kernel/v3.x/linux-3.16.79.tar.sign
+gpg --verify linux-3.16.79.tar.sign
+gpg --recv-keys <public key>
+tar xvf linux-3.16.79.tar
+cd linux-3.16.79
+cp -v /boot/config-$(uname -r) .config
+sudo apt-get install build-essential libncurses-dev bison flex libssl-dev libelf-dev
+make menuconfig
+make -j 4
+make modules_install
+make install
+
+# Update grub to boot kernel 3.16 as default(optinal)
+vim /etc/default/grub
+GRUB_DEFAULT="Advanced options for Deepin 15.11 GNU/Linux>Deepin 15.11 GNU/Linux, with Linux 3.16.79"
+
+# Enter bitflow dir to install bitflow module
+cd ./bitflow
+./install # it will recompile bitflow.ko
+vim .bashrc
+export BITFLOW_INSTALL_DIRS=/home/qblab/Bin/Andor_Linux/bitflow
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/qblab/Bin/Andor_Linux/bitflow/64b/lib
+
+# Enter the andor directory and run
 sudo ./install_andor
-#Then I add the follow configure to /etc/systemd/system
-#andorcameralink.service                                            
+# Then I add the follow configure to /etc/systemd/system
+# andorcameralink.service                                            
 
 [Unit]
 Description= Andor Camera Link
@@ -64,10 +89,10 @@ adding nopat to the line GRUB_CMDLINE_LINUX_DEFAULT and running sudo
 update-grub. You can check that the option is active by printing out
 /proc/cmdline, if it is not not the case, reboot your computer.
 
-The offical examples can run.
+The official examples can run.
 
 All software run but show AT_ERR_NODATA during live, I switch PCI slot
-and clost C-state in DELL bios. Finally work!
+and close C-state in DELL bios. Finally work!
 
 
 2. Compilation and  installatin of Lima
@@ -102,10 +127,11 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<my-new-install-dir>/Lima/lib
 export PYTHONPATH=$PYTHONPATH:<my-new-install-dir>
 ```
 
+3. Install Micro-manager
+In ArchLinux, following office document and commit from [micromanager AUR](https://aur.archlinux.org/packages/micromanager-git)
 
-
-3. Install Micro-manager in ArchLinux
-Following office document and commit from [micromanager AUR](https://aur.archlinux.org/packages/micromanager-git)
+In deepin 15.11, hadim have coded a great [mm build script](https://github.com/hadim/mm_scripts/blob/master/build-mm.sh).
+Only little modification are required.
 
 
 ## Install
@@ -119,6 +145,7 @@ Following office document and commit from [micromanager AUR](https://aur.archlin
 + [Andor sdk3 Micro-manager](https://micro-manager.org/wiki/AndorSDK3)
 + [Andor install guide from Libuca](https://github.com/ufo-kit/uca-andor)
 + [ERR11: AT_ERR_NODATA](http://micro-manager.3463995.n2.nabble.com/ANDOR-sCMOS-configuration-issues-td7587110.html)
++ [How to compile and install Linux Kernel 5.4.1 from source code](https://www.cyberciti.biz/tips/compiling-linux-kernel-26.html)
 
 # License
 GNU General Public License v3.0
